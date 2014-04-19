@@ -803,7 +803,7 @@ function processTSV() {
     	$('#charts_div').append(
         		'<h1 style="padding-left: 10px">' + tables[t][0][1] + '</h1>');
     	$('#charts_div').append(
-        		'<div id="chart_div' + t + '" style="width: 1050px; height: 570px"></div>');
+        		'<div id="chart_div' + t + '" class="map_container"></div>');
     	$('#charts_div').append(
     		'<div id="chart_legend' + t + '" style="width: 1050px"></div><hr />');
     	drawRegionsMap(tables[t], t);
@@ -869,25 +869,27 @@ function drawRegionsMap(table, t) {
 }
 
 function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
+  var columnName = table[0][1];
+  table.shift();  // Remove the first row - the header (e.g., "Country  Population").
+
+  // Convert percentages (if that's the case) to numbers.
 	var percentages = false;
-	if (typeof table[1][1] === 'string' && endsWith(table[1][1], '%')) {
+	if (typeof table[0][1] === 'string' && endsWith(table[0][1], '%')) {
 		percentages = true;
-		for (var i = 1; i < table.length; i++) {
+		for (var i = 0; i < table.length; i++) {
 			table[i][1] = Number(table[i][1].replace('%', ''));
 		}
 	}
-	
-	// Sort the numbers.
-  var numberOfItems = table.length - 1;
-	var axisValues = [];
-	for (var i = 1; i <= numberOfItems; i++) {
-		var value = table[i][1];
-		if (value == undefined) {
-			value = -1;
-		}
-		axisValues.push(value);
-	}
-	axisValues.sort(sortNumber);
+
+  // Sort the table based on value.
+  table.sort(function(a, b) {
+    a = a[1];
+    b = b[1];
+
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+	console.log(table)
 
   // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
 	// Since for example, many countries have small population, while very few (China/India) have
@@ -902,37 +904,31 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
   		scaled_colors.push(COLORS[i]);
   	}
   }
-    
   // Rainbow for the colors.
 	var rainbow = new Rainbow(); 
-	rainbow.setNumberRange(1, numberOfItems);
+	rainbow.setNumberRange(0, table.length - 1);
 	rainbow.setSpectrum.apply(this, scaled_colors);
-	var axisColors = [];
-	for (var i = 1; i <= numberOfItems; i++) {
-	    var hexColour = rainbow.colourAt(i);
-	    axisColors.push('#' + hexColour);
+
+  var colorDict = d3.map();
+	for (var i = 0; i < table.length; i++) {
+      var hexColour = rainbow.colourAt(i);
+      colorDict[table[i][0]] = '#' + hexColour;
 	}
 
-  // Chart (map) options and drawing.
-  var options = {region: mapRegion, resolution: mapResolution,
-  			   colorAxis: {colors: axisColors, values: axisValues},
-                 legend: 'none'};
-  var data = google.visualization.arrayToDataTable(table);
-  var chart = new google.visualization.GeoChart(document.getElementById('chart_div' + t));
-  chart.draw(data, options);
+  fillMap('chart_div' + t, colorDict);
   
   // Legend.
   var LEGEND_WIDTH = 350;
   legendDiv = '<div style="margin-left: 10px">';
-  legendDiv += '<div style="display: inline-block; padding-right: 10px">' + table[0][1] + ':</div>';
-  legendDiv += '<div style="display: inline-block">' + commafy(axisValues[0]) + '</div>';
-  for (var i = 0; i < axisColors.length; i++) {
+  legendDiv += '<div style="display: inline-block; padding-right: 10px">' + columnName + ':</div>';
+  legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
+  for (var i = 0; i < table.length; i++) {
   	legendDiv += 
-  		'<div style="background-color: ' + axisColors[i] + '; width: ' + 
-  		Math.round(LEGEND_WIDTH / axisColors.length) + 
+  		'<div style="background-color: #' + rainbow.colourAt(i) + '; width: ' + 
+  		Math.round(LEGEND_WIDTH / table.length) + 
   		'px; height: 15px; display: inline-block"> </div>';
   }
-  legendDiv += '<div style="display: inline-block">' + commafy(axisValues[numberOfItems - 1]) + '</div>';
+  legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
   legendDiv += '</div>';
   $('#chart_legend' + t).append(legendDiv);
 };
@@ -1375,7 +1371,7 @@ function addInfoWindow(map, marker, message) {
 }
 
 // Code inspired by http://techslides.com/d3-map-starter-kit/
-function fillMap(container_id) {
+function fillMap(container_id, colorDict) {
   d3.select(window).on("resize", throttle);
 
   var throttleTimer;
@@ -1453,7 +1449,7 @@ function fillMap(container_id) {
           .attr("d", path)
           .attr("id", function(d, i) { return d.id; })
           .attr("title", function(d, i) { return d.properties.name; })
-          .style("fill", function(d, i) { return d.properties.color; });
+          .style("fill", function(d, i) { return colorDict[d.properties.name]; /*d.properties.color;*/ });
 
       //offsets for tooltips
       var offsetL = document.getElementById(container_id).offsetLeft + 20;
@@ -1547,5 +1543,3 @@ function fillMap(container_id) {
       }
   }
 }
-
-fillMap('container');
