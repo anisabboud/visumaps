@@ -878,7 +878,7 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
 	}
 	
 	// Sort the numbers.
-    var numberOfItems = table.length - 1;
+  var numberOfItems = table.length - 1;
 	var axisValues = [];
 	for (var i = 1; i <= numberOfItems; i++) {
 		var value = table[i][1];
@@ -889,21 +889,21 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
 	}
 	axisValues.sort(sortNumber);
 
-    // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
+  // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
 	// Since for example, many countries have small population, while very few (China/India) have
 	// a huge population, and usually more populated countries tend to be bigger on the map, we 
 	// want more countries to be colored with the first color than the last color.
 	// E.g., white white white white silver silver silver gray gray black.
 	// The following loop scales the colors list this way.
-    var COLORS = ['#f4f4f4', 'yellow', 'orange', 'red', 'maroon', 'gray', 'black'];
-    var scaled_colors = [];
-    for (var i = 0; i < COLORS.length; i++) {
-    	for (var j = 0; j < COLORS.length - i; j++) {
-    		scaled_colors.push(COLORS[i]);
-    	}
-    }
+  var COLORS = ['#f4f4f4', 'yellow', 'orange', 'red', 'maroon', 'gray', 'black'];
+  var scaled_colors = [];
+  for (var i = 0; i < COLORS.length; i++) {
+  	for (var j = 0; j < COLORS.length - i; j++) {
+  		scaled_colors.push(COLORS[i]);
+  	}
+  }
     
-    // Rainbow for the colors.
+  // Rainbow for the colors.
 	var rainbow = new Rainbow(); 
 	rainbow.setNumberRange(1, numberOfItems);
 	rainbow.setSpectrum.apply(this, scaled_colors);
@@ -913,28 +913,28 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
 	    axisColors.push('#' + hexColour);
 	}
 
-    // Chart (map) options and drawing.
-    var options = {region: mapRegion, resolution: mapResolution,
-    			   colorAxis: {colors: axisColors, values: axisValues},
-                   legend: 'none'};
-    var data = google.visualization.arrayToDataTable(table);
-    var chart = new google.visualization.GeoChart(document.getElementById('chart_div' + t));
-    chart.draw(data, options);
-    
-    // Legend.
-    var LEGEND_WIDTH = 350;
-    legendDiv = '<div style="margin-left: 10px">';
-    legendDiv += '<div style="display: inline-block; padding-right: 10px">' + table[0][1] + ':</div>';
-    legendDiv += '<div style="display: inline-block">' + commafy(axisValues[0]) + '</div>';
-    for (var i = 0; i < axisColors.length; i++) {
-    	legendDiv += 
-    		'<div style="background-color: ' + axisColors[i] + '; width: ' + 
-    		Math.round(LEGEND_WIDTH / axisColors.length) + 
-    		'px; height: 15px; display: inline-block"> </div>';
-    }
-    legendDiv += '<div style="display: inline-block">' + commafy(axisValues[numberOfItems - 1]) + '</div>';
-    legendDiv += '</div>';
-    $('#chart_legend' + t).append(legendDiv);
+  // Chart (map) options and drawing.
+  var options = {region: mapRegion, resolution: mapResolution,
+  			   colorAxis: {colors: axisColors, values: axisValues},
+                 legend: 'none'};
+  var data = google.visualization.arrayToDataTable(table);
+  var chart = new google.visualization.GeoChart(document.getElementById('chart_div' + t));
+  chart.draw(data, options);
+  
+  // Legend.
+  var LEGEND_WIDTH = 350;
+  legendDiv = '<div style="margin-left: 10px">';
+  legendDiv += '<div style="display: inline-block; padding-right: 10px">' + table[0][1] + ':</div>';
+  legendDiv += '<div style="display: inline-block">' + commafy(axisValues[0]) + '</div>';
+  for (var i = 0; i < axisColors.length; i++) {
+  	legendDiv += 
+  		'<div style="background-color: ' + axisColors[i] + '; width: ' + 
+  		Math.round(LEGEND_WIDTH / axisColors.length) + 
+  		'px; height: 15px; display: inline-block"> </div>';
+  }
+  legendDiv += '<div style="display: inline-block">' + commafy(axisValues[numberOfItems - 1]) + '</div>';
+  legendDiv += '</div>';
+  $('#chart_legend' + t).append(legendDiv);
 };
 
 function getRandomColor() {
@@ -1547,4 +1547,5 @@ function fillMap(container_id) {
       }
   }
 }
+
 fillMap('container');
