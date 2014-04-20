@@ -1441,7 +1441,6 @@ function fillMap(container_id, colorDict) {
           .attr("class", "equator")
           .attr("d", path);
 
-
       var country = g.selectAll(".country").data(topo);
 
       country.enter().insert("path")
@@ -1480,7 +1479,6 @@ function fillMap(container_id, colorDict) {
 
   }
 
-
   function redraw() {
       width = document.getElementById(container_id).offsetWidth;
       height = width / 2;
@@ -1510,9 +1508,7 @@ function fillMap(container_id, colorDict) {
 
       //adjust the country hover stroke width based on zoom level
       d3.selectAll(".country").style("stroke-width", 1.5 / s);
-
   }
-
 
   // geo translation on mouse click in map
   function click() {
