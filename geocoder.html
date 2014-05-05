@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+  	<style>
+  		table, th, td { border: 1px solid #ccc; border-spacing: 0; border-collapse: collapse;}
+  	</style>
+  </head>
+  <body>
+	<table>
+  		<thead>
+  			<tr>
+  				<th><b>Queries</b></th>
+  				<th><b>Geonames ID</b></th>
+  				<th><b>Geonames toponym</b></th>
+  				<th><b>Geonames JSON entry</b></th>
+  			</tr>
+  		</thead>
+ 		<tbody>
+		    {% for row in rows %}
+  			<tr>
+  				<td>
+  					{% for query in row[1][0] %}
+  					<div>{{ query }}</div>
+		    		{% endfor %}
+  				</td>
+  				<td>{{ row[0] }}</td>
+  				<td>{{ row[1][1] }}</td>
+  				<td>{{ row[1][2] }}</td>
+  			</tr>
+		    {% endfor %}
+		</tbody>
+	</table>
+  </body>
+</html>
+{% endautoescape %}

@@ -84,4 +84,12 @@ for country_name in country_names:
         #print 'ERROR'
         pass
 
-    print '\t'.join([country_formatted_name, str(population), capital, first_language])
+    aliases = []
+    print country_formatted_name + '\t'
+    if result[ALIASES]:
+        aliases = [alias.encode(sys.stdout.encoding, 'replace') for alias in result[ALIASES]]
+        for alias in aliases:
+            print '\t' + alias
+
+
+    #print '\t'.join([country_formatted_name, str(population), capital, first_language])
