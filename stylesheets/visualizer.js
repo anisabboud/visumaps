@@ -909,13 +909,29 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
 	rainbow.setNumberRange(0, table.length - 1);
 	rainbow.setSpectrum.apply(this, scaled_colors);
 
-  var colorDict = d3.map();
-	for (var i = 0; i < table.length; i++) {
-      var hexColour = rainbow.colourAt(i);
-      colorDict[table[i][0]] = '#' + hexColour;
-	}
+  // Geocode all names.
+  var queries = [];
+  for (var i = 0; i < table.length; i++) {
+      queries[i] = table[i][0];
+  }
+  $.ajax({
+      url: '/geocode',
+      data: { q: queries },
+      dataType: "json",
+      traditional: true,
+      success: function(result) {
+        console.log(result);
 
-  fillMap('chart_div' + t, colorDict);
+        var colorDict = d3.map();
+        for (var i = 0; i < queries.length; i++) {
+            var hexColour = rainbow.colourAt(i);
+            // colorDict[result[queries[i]]] = '#' + hexColour;
+            colorDict[table[i][0]] = '#' + hexColour;
+        }
+
+        fillMap('chart_div' + t, colorDict);
+      }
+  });
   
   // Legend.
   var LEGEND_WIDTH = 350;

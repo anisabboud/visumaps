@@ -16,13 +16,12 @@ Created on May 1, 2014
 # Sample request: http://api.geonames.org/searchJSON?q=london&maxRows=10&username=demo
 # Actual request: http://api.geonames.org/searchJSON?q=us&maxRows=1&username=anis&featureClass=A&featureClass=P
 
-
-import urllib
-import urllib2
-import urlparse
+import csv
 import json
 import os
+import urllib
 
+from google.appengine.api import urlfetch
 from google.appengine.ext import db
 
 import jinja2
@@ -48,8 +47,23 @@ class Entry(db.Model):
     def GetAttr(self, attr):
         return json.loads(self.geonamesJsonEntry)['geonames'][0][attr]
 
-class Geocoder(webapp2.RequestHandler):
+def chunks(l, n):
+    """ Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i+n]
 
+class Geocoder(webapp2.RequestHandler):
+    NAME_MAPPINGS_FILE = 'name_mappings.tsv'
+    
+    def __init__(self, request=None, response=None):
+        webapp2.RequestHandler.__init__(self, request, response)
+        
+        self.name_mappings = {}
+        with open(self.NAME_MAPPINGS_FILE) as name_mappings_file:
+            name_mappings_list = csv.reader(name_mappings_file, delimiter='\t')
+            for name, corrected_name in name_mappings_list:
+                self.name_mappings[name] = corrected_name
+        
     def get(self):
         geocode_all = self.request.get('all')  # See http://webapp-improved.appspot.com/guide/request.html
         if geocode_all:
@@ -57,21 +71,34 @@ class Geocoder(webapp2.RequestHandler):
             return
             
         queries = self.request.params.getall('q')  # See http://webapp-improved.appspot.com/guide/request.html
-        
-        queries_to_ids = db.GqlQuery('SELECT * FROM QueryToId WHERE query IN :1',
-                                     queries)
+        geocoded_queries = self.geocode(queries)
+        self.response.write(geocoded_queries)
 
+    def GetGeonamesResponse(self, query):
+        if query in self.name_mappings:
+            query = self.name_mappings[query]
+        url = 'http://api.geonames.org/searchJSON?q=%s&maxRows=1&username=anis&featureClass=A&featureClass=P&style=SHORT' % str(urllib.quote((query.encode('utf8'))))
+        response = urlfetch.fetch(url) # response = urllib2.urlopen(url) 
+        return json.loads(response.content) #data = json.load(response)
+
+
+    def geocode(self, queries):
         # Fill in the IDs of queries which are already in the DataStore.
         geonamesIds = {}
-        for q in queries_to_ids:
-            geonamesIds[q.query] = q.geonamesId
+        for chunk in list(chunks(queries, 30)):  # App Engine accepts only <= 30 in the IN argument.
+            queries_to_ids = db.GqlQuery('SELECT * FROM QueryToId WHERE query IN :1',
+                                         chunk)
+            for q in queries_to_ids:
+                geonamesIds[q.query] = q.geonamesId
         
         # For queries that haven't been encountered in the past (not in the DataStore), request their entry 
         # from the Geonames search API - http://www.geonames.org/export/geonames-search.html
         for query in queries:
             if query not in geonamesIds:
-                response = urllib2.urlopen('http://api.geonames.org/searchJSON?q=%s&maxRows=1&username=anis&featureClass=A&featureClass=P&style=SHORT' % str(urllib.quote((query))))
-                data = json.load(response)
+                data = self.GetGeonamesResponse(query)
+                if not data['geonames']:
+                    print 'No geocoding for:', query.encode('utf8')
+                    continue
                 
                 geonamesId = data['geonames'][0]['geonameId']
                 geonamesIds[query] = geonamesId
@@ -84,12 +111,11 @@ class Geocoder(webapp2.RequestHandler):
                                   geonamesId=geonamesId,
                                   geonamesJsonEntry=json_str)
                 
-                print data['geonames'][0]['toponymName']
-                print data['geonames'][0]['geonameId']
+                print 'Geocoded:', query.encode('utf8'), '-->', new_entry.GetAttr('toponymName').encode('utf8'), geonamesId
                 
                 db.put(new_query_to_id)
                 db.put(new_entry)
-        self.response.write(json.dumps(geonamesIds))
+        return json.dumps(geonamesIds)
 
     def PrintDatabase(self):
         entries = db.GqlQuery('SELECT * FROM Entry')
@@ -105,7 +131,7 @@ class Geocoder(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('geocoder.html')
         self.response.write(template.render(template_values))
-            
+
 application = webapp2.WSGIApplication([
     ('/geocode', Geocoder),
 ], debug=True)
