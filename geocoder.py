@@ -76,8 +76,9 @@ class Geocoder(webapp2.RequestHandler):
 
     def GetGeonamesResponse(self, query):
         if query in self.name_mappings:
-            query = self.name_mappings[query]
+            query = self.name_mappings[query].decode('utf-8')
         url = 'http://api.geonames.org/searchJSON?q=%s&maxRows=1&username=anis&featureClass=A&featureClass=P&style=SHORT' % str(urllib.quote((query.encode('utf8'))))
+        urlfetch.set_default_fetch_deadline(60)
         response = urlfetch.fetch(url) # response = urllib2.urlopen(url) 
         return json.loads(response.content) #data = json.load(response)
 
@@ -93,11 +94,12 @@ class Geocoder(webapp2.RequestHandler):
         
         # For queries that haven't been encountered in the past (not in the DataStore), request their entry 
         # from the Geonames search API - http://www.geonames.org/export/geonames-search.html
+        no_geocoding = []
         for query in queries:
             if query not in geonamesIds:
                 data = self.GetGeonamesResponse(query)
                 if not data['geonames']:
-                    print 'No geocoding for:', query.encode('utf8')
+                    no_geocoding.append(query)
                     continue
                 
                 geonamesId = data['geonames'][0]['geonameId']
@@ -115,6 +117,9 @@ class Geocoder(webapp2.RequestHandler):
                 
                 db.put(new_query_to_id)
                 db.put(new_entry)
+        if no_geocoding:
+            print 'No geocoding for:'
+            print '\n'.join([query.encode('utf-8') + '\t' for query in no_geocoding])
         return json.dumps(geonamesIds)
 
     def PrintDatabase(self):

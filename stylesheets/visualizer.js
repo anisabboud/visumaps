@@ -773,47 +773,61 @@ function fillSampleData(i) {
 function processTSV() {
 	var table = $.tsv.parseRows($('#data').val());
      
-    var tables = new Array();
-    var idx = 0;
-    for (var column = 1; column < table[0].length; column++) {
-    	tables[idx] = new Array();
-    	var plusImages = false;
-    	if (column + 1 < table[0].length && (table[0][column + 1] === table[0][column] + " image")) {
-    		plusImages = true;
-    	} 
-    	for (var row = 0; row < table.length; row++) {
-    		var value = table[row][column];
-    		if ($.isNumeric(value)) {
-    			value = parseInt(value, 10);
-    		}
-    		var newRow = [table[row][0], value];
-    		if (plusImages) {
-    			newRow.push(table[row][column + 1]);
-    		}
-    		tables[idx][row] = newRow;
-    	}
-    	idx++;
-    	if (plusImages) {
-    		column++;  // Advance 2 columns on this iteration.
-    	}
-    }
+  var tables = new Array();
+  var idx = 0;
+  for (var column = 1; column < table[0].length; column++) {
+  	tables[idx] = new Array();
+  	var plusImages = false;
+  	if (column + 1 < table[0].length && (table[0][column + 1] === table[0][column] + " image")) {
+  		plusImages = true;
+  	} 
+  	for (var row = 0; row < table.length; row++) {
+  		var value = table[row][column];
+  		if ($.isNumeric(value)) {
+  			value = parseInt(value, 10);
+  		}
+  		var newRow = [table[row][0], value];
+  		if (plusImages) {
+  			newRow.push(table[row][column + 1]);
+  		}
+  		tables[idx][row] = newRow;
+  	}
+  	idx++;
+  	if (plusImages) {
+  		column++;  // Advance 2 columns on this iteration.
+  	}
+  }
 
-	$('#charts_div').empty();
-    for (var t = 0; t < tables.length; t++) {
-    	$('#charts_div').append(
-        		'<h1 style="padding-left: 10px">' + tables[t][0][1] + '</h1>');
-    	$('#charts_div').append(
-        		'<div id="chart_div' + t + '" class="map_container"></div>');
-    	$('#charts_div').append(
-    		'<div id="chart_legend' + t + '" style="width: 1050px"></div><hr />');
-    	drawRegionsMap(tables[t], t);
+  // Geocode all names.
+  var queries = [];
+  for (var i = 1; i < table.length; i++) {
+      queries[i - 1] = table[i][0];
+  }
+  $.ajax({
+    url: '/geocode',
+    data: { q: queries },
+    dataType: "json",
+    traditional: true,
+    success: function(geocoded_locations) {
+      $('#charts_div').empty();
+      for (var t = 0; t < tables.length; t++) {
+        $('#charts_div').append(
+              '<h1 style="padding-left: 10px">' + tables[t][0][1] + '</h1>');
+        $('#charts_div').append(
+              '<div id="chart_div' + t + '" class="map_container"></div>');
+        $('#charts_div').append(
+          '<div id="chart_legend' + t + '" style="width: 1050px"></div><hr />');
+        drawRegionsMap(tables[t], t, geocoded_locations);
+      }
     }
+  });
 };
 
 function sortNumber(a, b) {
     return a - b;
 }
 function commafy(num) {
+  console.log(num);
     var str = num.toString().split('.');
     if (str[0].length >= 5) {
         str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
@@ -830,7 +844,7 @@ function endsWith(str, suffix) {
 
 // First row of the table is the header row. (e.g., Country, Population).
 // Table has two columns: Item, Value. (e.g., Israel, 8M).
-function drawRegionsMap(table, t) {
+function drawRegionsMap(table, t, geocoded_locations) {
 	var mapRegion = 'world';
 	var mapResolution = 'countries';
 	if (table[0][0] === 'Country') {
@@ -861,15 +875,15 @@ function drawRegionsMap(table, t) {
 	} else {
 		// displayMode: 'regions'.
 		if (typeof table[1][1] === 'number' || endsWith(table[1][1], '%')) {
-			drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution);
+			drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution, geocoded_locations);
 		} else {
-			drawRegionsMapNominalData(table, t, mapRegion, mapResolution);
+			drawRegionsMapNominalData(table, t, mapRegion, mapResolution, geocoded_locations);
 		}
 	}
 }
 
-function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
-  var columnName = table[0][1];
+function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution, geocoded_locations) {
+  var column_name = table[0][1];
   table.shift();  // Remove the first row - the header (e.g., "Country  Population").
 
   // Convert percentages (if that's the case) to numbers.
@@ -889,64 +903,38 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution) {
     return a < b ? -1 : (a > b ? 1 : 0);
   });
 
-	console.log(table)
+	// console.log(table);
 
-  // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
-	// Since for example, many countries have small population, while very few (China/India) have
-	// a huge population, and usually more populated countries tend to be bigger on the map, we 
-	// want more countries to be colored with the first color than the last color.
-	// E.g., white white white white silver silver silver gray gray black.
-	// The following loop scales the colors list this way.
-  var COLORS = ['#f4f4f4', 'yellow', 'orange', 'red', 'maroon', 'gray', 'black'];
-  var scaled_colors = [];
-  for (var i = 0; i < COLORS.length; i++) {
-  	for (var j = 0; j < COLORS.length - i; j++) {
-  		scaled_colors.push(COLORS[i]);
-  	}
-  }
-  // Rainbow for the colors.
-	var rainbow = new Rainbow(); 
-	rainbow.setNumberRange(0, table.length - 1);
-	rainbow.setSpectrum.apply(this, scaled_colors);
+ //  // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
+	// // Since for example, many countries have small population, while very few (China/India) have
+	// // a huge population, and usually more populated countries tend to be bigger on the map, we 
+	// // want more countries to be colored with the first color than the last color.
+	// // E.g., white white white white silver silver silver gray gray black.
+	// // The following loop scales the colors list this way.
+ //  var COLORS = ['yellow', 'orange', 'red', 'maroon', 'gray', 'black'];
+ //  var scaled_colors = [];
+ //  for (var i = 0; i < COLORS.length; i++) {
+ //  	for (var j = 0; j < COLORS.length - i; j++) {
+ //  		scaled_colors.push(COLORS[i]);
+ //  	}
+ //  }
+ //  // Rainbow for the colors.
+	// var rainbow = new Rainbow(); 
+	// rainbow.setNumberRange(0, table.length - 1);
+	// rainbow.setSpectrum.apply(this, scaled_colors);
 
-  // Geocode all names.
-  var queries = [];
-  for (var i = 0; i < table.length; i++) {
-      queries[i] = table[i][0];
-  }
-  $.ajax({
-      url: '/geocode',
-      data: { q: queries },
-      dataType: "json",
-      traditional: true,
-      success: function(result) {
-        console.log(result);
+  // var color_dict = d3.map();
+  // var name_dict = d3.map();
+  // for (var i = 0; i < table.length; i++) {
+  //     // var hexColour = rainbow.colourAt(i);
+  //     country_name = table[i][0];
+  //     if (country_name in geocoded_locations) {
+  //       // color_dict[geocoded_locations[country_name]] = '#' + hexColour;
+  //       name_dict[geocoded_locations[country_name]] = country_name;
+  //     }
+  // }
 
-        var colorDict = d3.map();
-        for (var i = 0; i < queries.length; i++) {
-            var hexColour = rainbow.colourAt(i);
-            // colorDict[result[queries[i]]] = '#' + hexColour;
-            colorDict[table[i][0]] = '#' + hexColour;
-        }
-
-        fillMap('chart_div' + t, colorDict);
-      }
-  });
-  
-  // Legend.
-  var LEGEND_WIDTH = 350;
-  legendDiv = '<div style="margin-left: 10px">';
-  legendDiv += '<div style="display: inline-block; padding-right: 10px">' + columnName + ':</div>';
-  legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
-  for (var i = 0; i < table.length; i++) {
-  	legendDiv += 
-  		'<div style="background-color: #' + rainbow.colourAt(i) + '; width: ' + 
-  		Math.round(LEGEND_WIDTH / table.length) + 
-  		'px; height: 15px; display: inline-block"> </div>';
-  }
-  legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
-  legendDiv += '</div>';
-  $('#chart_legend' + t).append(legendDiv);
+  fillMap('chart_div' + t, table, geocoded_locations, column_name, '#chart_legend' + t);
 };
 
 function getRandomColor() {
@@ -983,7 +971,7 @@ function getRainbowColors(numberOfColors) {
     return colors;
 }
 
-function drawRegionsMapNominalData(table, t, mapRegion, mapResolution) {
+function drawRegionsMapNominalData(table, t, mapRegion, mapResolution, geocoded_locations) {
     var numberOfItems = table.length - 1;
 	var values = [];
 	for (var i = 1; i <= numberOfItems; i++) {
@@ -1055,8 +1043,8 @@ function drawRegionsMapNominalData(table, t, mapRegion, mapResolution) {
 		console.log(numberOfGroups)
 		axisColors = getRainbowColors(numberOfGroups);
 	    
-	    // Legend.
-	    legendDiv = '<div style="margin-left: 10px"><table>';
+    // Legend.
+    legendDiv = '<div style="margin-left: 10px"><table>';
 		var legendValues = Object.keys(dict);
 	    for (var i = 0; i < legendValues.length; i++) {
 	    	var value = legendValues[i];
@@ -1074,16 +1062,16 @@ function drawRegionsMapNominalData(table, t, mapRegion, mapResolution) {
 	}
 	
 	var dataRows = [];  // Each row is [State name, color index, value]
-	var imagesDict = {};  // Maps from value to image URL.
-	var dataDict = {};  // Maps from State name to [color, image URL]
+	var images_dict = {};  // Maps from value to image URL.
+	var data_dict = {};  // Maps from State name to [color, image URL]
 	for (var i = 1; i < table.length; i++) {
 		var colorIndex = dict[table[i][1]];
 		dataRows.push([table[i][0], colorIndex, table[i][1]]);
 		if (plusImages) {
 			if (table[i][2] !== '') {
-				imagesDict[table[i][1]] = table[i][2];
+				images_dict[table[i][1]] = table[i][2];
 			}
-			dataDict[table[i][0]] = [axisColors[colorIndex], imagesDict[table[i][1]]];
+			data_dict[table[i][0]] = [axisColors[colorIndex], images_dict[table[i][1]]];
 		}
 	}
 
@@ -1099,7 +1087,7 @@ function drawRegionsMapNominalData(table, t, mapRegion, mapResolution) {
 		jQuery.get("/stylesheets/states.xml", {}, function(data) {
 			jQuery(data).find("state").each(function() {
 				var name = this.getAttribute('name');
-				var colorAndURL = dataDict[name];
+				var colorAndURL = data_dict[name];
 				var colour = colorAndURL[0];  // this.getAttribute('colour');
 				var url = colorAndURL[1];
 				var points = this.getElementsByTagName("point");
@@ -1387,7 +1375,7 @@ function addInfoWindow(map, marker, message) {
 }
 
 // Code inspired by http://techslides.com/d3-map-starter-kit/
-function fillMap(container_id, colorDict) {
+function fillMap(container_id, table, geocoded_locations, column_name, legend_container) {
   d3.select(window).on("resize", throttle);
 
   var throttleTimer;
@@ -1430,12 +1418,84 @@ function fillMap(container_id, colorDict) {
       g = svg.append("g");
   }
 
-  d3.json("../data/world-topo-min.json", function(error, world) {
+  d3.json("../data/world-topo-min-geocoded.json", function(error, world) {
       var countries = topojson.feature(world, world.objects.countries).features;
 
       topo = countries;
       draw(topo);
   });
+
+  function Summator(numbers) {
+    this.sum_array = [0];
+    s = 0;
+    for (var i = 0; i < numbers.length; i++) {
+      s += numbers[i];
+      this.sum_array[i + 1] = s;
+    }
+    this.sum = function(i, j) {
+        return this.sum_array[j] - this.sum_array[i];
+    };
+  }
+
+  function create2dArray(rows, cols) {
+    var a = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+      a[i] = new Array(cols);
+    }
+    return a;
+  }
+
+  function diff(a, b) {
+    return Math.abs(a - b);
+  }
+
+  var ALGORITHM = {'EQUAL_LENGTH': 0,
+                   'EQUAL_AREA_OPTIMAL': 4}
+  function getPivots(areas, colors, algorithm) {
+    var pivots = [];
+    switch (algorithm) {
+      case ALGORITHM.EQUAL_LENGTH: 
+        for (var i = 0; i < colors; i++) {
+          pivots[i] = Math.round(areas.length / colors * (i + 1));
+        }
+        return pivots;
+      case ALGORITHM.EQUAL_AREA_OPTIMAL:
+        var n = areas.length;
+        var k = colors;
+        var s = new Summator(areas);
+        var avg_chunk = s.sum(0, n) / k;
+
+        var best_error = create2dArray(n + 1, k);
+        var best_pivots = create2dArray(n + 1, k);
+
+        for (var m = 0; m <= n; m++) {
+          best_error[m][0] = diff(s.sum(0, m), avg_chunk);
+          best_pivots[m][0] = [];
+        }
+
+        for (var p = 1; p < k; p++) {
+          var m = n;
+          var pivot = n;
+          while (m >= 0) {
+            if (pivot > m) {
+              pivot = m;
+            }
+            while (s.sum(pivot, m) < avg_chunk && pivot > 0) {
+              pivot--;
+            }
+            if (best_error[pivot + 1][p - 1] + diff(s.sum(pivot + 1, m), avg_chunk) < 
+                best_error[pivot][p - 1] + diff(s.sum(pivot, m), avg_chunk)) {
+              pivot++;
+            }
+            best_error[m][p] = best_error[pivot][p - 1] + diff(s.sum(pivot, m), avg_chunk);
+            best_pivots[m][p] = best_pivots[pivot][p - 1].concat([pivot]);
+            m--;
+          }
+        }
+
+        return best_pivots[n][k - 1].concat([areas.length]);
+    }
+  }
 
   function draw(topo) {
       svg.append("path")
@@ -1457,14 +1517,81 @@ function fillMap(container_id, colorDict) {
           .attr("class", "equator")
           .attr("d", path);
 
+
+      var area_dict = {}
+      topo.forEach(function(geom) {
+        if ('properties' in geom) {
+          area_dict[geom.properties.geonameId] = path.area(geom);
+          //geom.properties.area = path.area(geom);
+          //console.log(geom.properties.area);
+        }
+      });
+
+      // Geonames IDs and corresponding areas of all input countries, sorted by 
+      // the numerical value provided by the user.
+      var geonameIds = [];
+      var areas = [];
+      var name_dict = d3.map();
+      for (var i = 0; i < table.length; i++) {
+        var country_name = table[i][0];
+        if (country_name in geocoded_locations) {
+          geonameId = geocoded_locations[country_name];
+          if (geonameId in area_dict) {
+            geonameIds.push(geonameId);
+            areas.push(area_dict[geonameId]);
+          }
+          name_dict[geocoded_locations[country_name]] = country_name;
+        }
+      }
+
+      // Legend - Part A.
+      var LEGEND_WIDTH = 350;
+      legendDiv = '<div style="margin-left: 10px">';
+      legendDiv += '<div style="display: inline-block; padding-right: 10px">' + column_name + ':</div>';
+      legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
+
+      var color_dict = {};
+      var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
+      var pivots = getPivots(areas, COLORS.length, ALGORITHM.EQUAL_LENGTH);
+      var pivots = getPivots(areas, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
+      var index = 0;
+      var pivot = 0;
+      while (pivot < pivots.length) {
+        while (index < pivots[pivot]) {
+          color_dict[geonameIds[index]] = COLORS[pivot];
+          // Legend - Part B.
+          legendDiv += 
+             '<div style="background-color: ' + COLORS[pivot] + '; width: ' + 
+             Math.round(LEGEND_WIDTH / table.length) + 
+             'px; height: 15px; display: inline-block"> </div>';
+          index++;
+        }
+        pivot++;
+      }
+      console.log(color_dict);
+      // Legend - Part C.
+      legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
+      legendDiv += '</div>';
+      $(legend_container).append(legendDiv);
+
       var country = g.selectAll(".country").data(topo);
 
       country.enter().insert("path")
           .attr("class", "country")
           .attr("d", path)
           .attr("id", function(d, i) { return d.id; })
-          .attr("title", function(d, i) { return d.properties.name; })
-          .style("fill", function(d, i) { return colorDict[d.properties.name]; /*d.properties.color;*/ });
+          .attr("title", function(d, i) {
+            if (d.properties.geonameId in name_dict) {
+              return name_dict[d.properties.geonameId]; /*d.properties.color;*/
+            }
+            return '(No data)';
+          })
+          .style("fill", function(d, i) {
+            if (d.properties.geonameId in color_dict) {
+              return color_dict[d.properties.geonameId]; /*d.properties.color;*/
+            }
+            return '#eee';
+          });
 
       //offsets for tooltips
       var offsetL = document.getElementById(container_id).offsetLeft + 20;
@@ -1479,7 +1606,7 @@ function fillMap(container_id, colorDict) {
 
               tooltip.classed("hidden", false)
                   .attr("style", "left:" + (mouse[0] + offsetL) + "px;top:" + (mouse[1] + offsetT) + "px")
-                  .html(d.properties.name);
+                  .html(name_dict[d.properties.geonameId]);
           })
           .on("mouseout", function(d, i) {
               tooltip.classed("hidden", true);
