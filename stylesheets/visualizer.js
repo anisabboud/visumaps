@@ -1450,8 +1450,11 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
   }
 
   var ALGORITHM = {'EQUAL_LENGTH': 0,
-                   'EQUAL_AREA_OPTIMAL': 4}
-  function getPivots(areas, colors, algorithm) {
+                   'EQUAL_AREA_OPTIMAL': 4,
+                   'EQUAL_INTERVAL': 5,
+                   'JENKS': 6,
+                  }
+  function getPivots(areas, values, colors, algorithm) {
     var pivots = [];
     switch (algorithm) {
       case ALGORITHM.EQUAL_LENGTH: 
@@ -1459,6 +1462,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
           pivots[i] = Math.round(areas.length / colors * (i + 1));
         }
         return pivots;
+
       case ALGORITHM.EQUAL_AREA_OPTIMAL:
         var n = areas.length;
         var k = colors;
@@ -1494,7 +1498,36 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         }
 
         return best_pivots[n][k - 1].concat([areas.length]);
+
+      case ALGORITHM.EQUAL_INTERVAL:
+        return getPivotsFromBreaks(values, getEqualIntervalBreaks(values[0], values[values.length - 1], colors));
+
+      case ALGORITHM.JENKS:
+        return getPivotsFromBreaks(values, jenks(values, colors));
     }
+  }
+
+  function getPivotsFromBreaks(values, breaks) {
+    var pivots = [];
+    var b = 1;
+    var i = 0;
+    while (b < breaks.length) {
+      while (values[i] <= breaks[b] && i < values.length) {
+        i++;
+      }
+      pivots.push(i);
+      b++;
+    }
+
+    return pivots;
+  }
+
+  function getEqualIntervalBreaks(min_value, max_value, num_intervals) {
+    var breaks = [];
+    for (var i = 0; i <= num_intervals; i++) {
+      breaks.push(min_value + (max_value - min_value) * i / num_intervals);
+    }
+    return breaks;
   }
 
   function draw(topo) {
@@ -1531,6 +1564,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       // the numerical value provided by the user.
       var geonameIds = [];
       var areas = [];
+      var values = [];
       var name_dict = d3.map();
       for (var i = 0; i < table.length; i++) {
         var country_name = table[i][0];
@@ -1539,6 +1573,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
           if (geonameId in area_dict) {
             geonameIds.push(geonameId);
             areas.push(area_dict[geonameId]);
+            values.push(table[i][1]);
           }
           name_dict[geocoded_locations[country_name]] = country_name;
         }
@@ -1552,8 +1587,11 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
       var color_dict = {};
       var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
-      var pivots = getPivots(areas, COLORS.length, ALGORITHM.EQUAL_LENGTH);
-      var pivots = getPivots(areas, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);
+      console.log("pivots: " + pivots);
       var index = 0;
       var pivot = 0;
       while (pivot < pivots.length) {
@@ -1658,7 +1696,6 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       var latlon = projection.invert(d3.mouse(this));
       console.log(latlon);
   }
-
 
   // function to add points and text to the map (used in plotting capitals)
   function addpoint(lat, lon, text) {
