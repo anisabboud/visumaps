@@ -1453,6 +1453,8 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
                    'EQUAL_AREA_OPTIMAL': 4,
                    'EQUAL_INTERVAL': 5,
                    'JENKS': 6,
+                   'HEAD_TAIL_BREAKS': 7,
+                   'OPTIMIZED': 8,
                   }
   function getPivots(areas, values, colors, algorithm) {
     var pivots = [];
@@ -1504,6 +1506,12 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
       case ALGORITHM.JENKS:
         return getPivotsFromBreaks(values, jenks(values, colors));
+
+      case ALGORITHM.HEAD_TAIL_BREAKS:
+        return getPivotsFromBreaks(values, getHeadTailBreaks(values, colors));
+
+      case ALGORITHM.OPTIMIZED:
+        return getOptimizedPivots(areas, 0, colors);
     }
   }
 
@@ -1528,6 +1536,41 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       breaks.push(min_value + (max_value - min_value) * i / num_intervals);
     }
     return breaks;
+  }
+
+  function getHeadTailBreaks(values, num_intervals) {
+    var breaks = [];
+    // TODO
+    return breaks;
+  }
+
+  var U = 2;  // Upper bound on the chunk length or sum ratio.
+  var L = 0.5;  // Lower bound on the chunk length ratio.
+  function getOptimizedPivots(numbers, start_index, num_chunks) {
+    if (num_chunks == 1) {
+      return [numbers.length];
+    }
+
+    var SUM = d3.sum(numbers.slice(start_index, numbers.length));
+    var AVG = SUM / num_chunks;
+    var LEN = numbers.length - start_index;
+    var AVG_LEN = LEN / num_chunks;
+
+    var len = 0;  // The length of the new chunk.
+    var s = 0;  // The sum of the new chunk.
+    for (var i = start_index; i < numbers.length; i++) {
+      s += numbers[i];
+      len++;
+      if (s >= U * AVG ||  // Condition 1.
+          len >= U * AVG_LEN ||  // Condition 2.
+          (s >= AVG && len >= L * AVG_LEN)) {  // Condition 3.
+        break;
+      }
+    }
+
+    var pivots = getOptimizedPivots(numbers, i + 1, num_chunks - 1);
+    pivots.unshift(i + 1);
+    return pivots;
   }
 
   function draw(topo) {
@@ -1586,11 +1629,19 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
 
       var color_dict = {};
-      var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
-      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);
+      var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];  // 5 colors.
+      //var COLORS = ['#fed976', '#fd8d3c', '#bd0026'];  // 3 colors.
+      console.log("Anis");
+      console.log(areas);
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);
       var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED);
+      console.log("areas: " + areas);
+      areas.forEach(function(a) {
+        console.log(Math.round(a));
+      });
       console.log("pivots: " + pivots);
       var index = 0;
       var pivot = 0;
@@ -1610,6 +1661,15 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       // Legend - Part C.
       legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
       legendDiv += '</div>';
+      // Legend - Part D.
+      legendDiv += '<b>Legend:</b><table>';
+      for (var i = 0; i < pivots.length; i++) {
+        legendDiv += '<tr><td style="width: 100px; background-color: ' + COLORS[i] + '"></td><td style="text-align:right">' 
+            + commafy(i == 0 ? values[0] : values[pivots[i - 1]]) 
+            + '</td><td>&mdash;</td><td style="text-align:right">' 
+            + commafy(values[pivots[i] - 1]);
+      }
+      legendDiv += '</table>';
       $(legend_container).append(legendDiv);
 
       var country = g.selectAll(".country").data(topo);
@@ -1652,11 +1712,11 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
 
       //EXAMPLE: adding some capitals from external CSV file
-      d3.csv("../data/country-capitals.csv", function(err, capitals) {
-          capitals.forEach(function(i) {
-              addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName);
-          });
-      });
+      // d3.csv("../data/country-capitals.csv", function(err, capitals) {
+      //     capitals.forEach(function(i) {
+      //         addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName);
+      //     });
+      // });
 
   }
 
@@ -1688,7 +1748,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
       //adjust the country hover stroke width based on zoom level
-      d3.selectAll(".country").style("stroke-width", 1.5 / s);
+      d3.selectAll(".country").style("stroke-width", 0.5 / s);
   }
 
   // geo translation on mouse click in map

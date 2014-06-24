@@ -100,6 +100,7 @@ class Geocoder(webapp2.RequestHandler):
                 data = self.GetGeonamesResponse(query)
                 if not data['geonames']:
                     no_geocoding.append(query)
+                    # TODO(Anis): Use Google geocoder for the failing ones.
                     continue
                 
                 geonamesId = data['geonames'][0]['geonameId']
