@@ -827,7 +827,6 @@ function sortNumber(a, b) {
     return a - b;
 }
 function commafy(num) {
-  console.log(num);
     var str = num.toString().split('.');
     if (str[0].length >= 5) {
         str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
@@ -902,37 +901,6 @@ function drawRegionsMapOrdinalData(table, t, mapRegion, mapResolution, geocoded_
 
     return a < b ? -1 : (a > b ? 1 : 0);
   });
-
-	// console.log(table);
-
- //  // Scale colors in a Harmonic scale (similar to logarithmic scale), but I invented it now.
-	// // Since for example, many countries have small population, while very few (China/India) have
-	// // a huge population, and usually more populated countries tend to be bigger on the map, we 
-	// // want more countries to be colored with the first color than the last color.
-	// // E.g., white white white white silver silver silver gray gray black.
-	// // The following loop scales the colors list this way.
- //  var COLORS = ['yellow', 'orange', 'red', 'maroon', 'gray', 'black'];
- //  var scaled_colors = [];
- //  for (var i = 0; i < COLORS.length; i++) {
- //  	for (var j = 0; j < COLORS.length - i; j++) {
- //  		scaled_colors.push(COLORS[i]);
- //  	}
- //  }
- //  // Rainbow for the colors.
-	// var rainbow = new Rainbow(); 
-	// rainbow.setNumberRange(0, table.length - 1);
-	// rainbow.setSpectrum.apply(this, scaled_colors);
-
-  // var color_dict = d3.map();
-  // var name_dict = d3.map();
-  // for (var i = 0; i < table.length; i++) {
-  //     // var hexColour = rainbow.colourAt(i);
-  //     country_name = table[i][0];
-  //     if (country_name in geocoded_locations) {
-  //       // color_dict[geocoded_locations[country_name]] = '#' + hexColour;
-  //       name_dict[geocoded_locations[country_name]] = country_name;
-  //     }
-  // }
 
   fillMap('chart_div' + t, table, geocoded_locations, column_name, '#chart_legend' + t);
 };
@@ -1040,7 +1008,6 @@ function drawRegionsMapNominalData(table, t, mapRegion, mapResolution, geocoded_
 				}
 			}
 		}
-		console.log(numberOfGroups)
 		axisColors = getRainbowColors(numberOfGroups);
 	    
     // Legend.
@@ -1391,7 +1358,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       .on("zoom", move);
 
   var width = document.getElementById(container_id).offsetWidth;
-  var height = width / 2;
+  var height = width * 0.95 // / 2;
 
   var topo, projection, path, svg, g;
 
@@ -1515,7 +1482,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         return getOptimizedGreedyPivots(areas, 0, colors);
 
       case ALGORITHM.OPTIMIZED_OPTIMAL:
-        var W = 0.8;
+        var W = 1;
         var n = areas.length;
         var k = colors;
         var s = new Summator(areas);
@@ -1527,7 +1494,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         var best_pivots = create2dArray(n + 1, k);
 
         for (var m = 0; m <= n; m++) {
-          best_error[m][0] = diff(s.sum(0, m), avg_chunk) / sum_all + W * diff(m, avg_len) / n;
+          best_error[m][0] = Math.pow(diff(s.sum(0, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m, avg_len) / n, 2);
           best_pivots[m][0] = [];
         }
 
@@ -1537,10 +1504,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
             var min_error = -1;
             var best_pivot = -1;
             for (var pivot = 0; pivot <= m; pivot++) {
-              var pivot_error = best_error[pivot][p - 1] + diff(s.sum(pivot, m), avg_chunk) / sum_all + W * diff(m - pivot, avg_len) / n;
-              if (pivot % 10 == 0) {
-              console.log("pivot_error: " + best_error[pivot][p - 1] + " + " + diff(s.sum(pivot, m), avg_chunk) / sum_all + " + W * " + (diff(m - pivot, avg_len) / n) + " = " + pivot_error)
-              }
+              var pivot_error = best_error[pivot][p - 1] + Math.pow(diff(s.sum(pivot, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m - pivot, avg_len) / n, 2);
               if (min_error == -1 || pivot_error < min_error) {
                 min_error = pivot_error;
                 best_pivot = pivot;
@@ -1671,19 +1635,14 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       var color_dict = {};
       var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];  // 5 colors.
       //var COLORS = ['#fed976', '#fd8d3c', '#bd0026'];  // 3 colors.
-      console.log("Anis");
-      console.log(areas);
-      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);
-      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
+
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);
-      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
-      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);
-      console.log("areas: " + areas);
-      areas.forEach(function(a) {
-        console.log(Math.round(a));
-      });
-      console.log("pivots: " + pivots);
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);
+
       var index = 0;
       var pivot = 0;
       while (pivot < pivots.length) {
@@ -1698,7 +1657,6 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         }
         pivot++;
       }
-      console.log(color_dict);
       // Legend - Part C.
       legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
       legendDiv += '</div>';
