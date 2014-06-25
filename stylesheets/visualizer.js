@@ -1454,7 +1454,8 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
                    'EQUAL_INTERVAL': 5,
                    'JENKS': 6,
                    'HEAD_TAIL_BREAKS': 7,
-                   'OPTIMIZED': 8,
+                   'OPTIMIZED_GREEDY': 8,
+                   'OPTIMIZED_OPTIMAL': 9,
                   }
   function getPivots(areas, values, colors, algorithm) {
     var pivots = [];
@@ -1510,8 +1511,47 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       case ALGORITHM.HEAD_TAIL_BREAKS:
         return getPivotsFromBreaks(values, getHeadTailBreaks(values, colors));
 
-      case ALGORITHM.OPTIMIZED:
-        return getOptimizedPivots(areas, 0, colors);
+      case ALGORITHM.OPTIMIZED_GREEDY:
+        return getOptimizedGreedyPivots(areas, 0, colors);
+
+      case ALGORITHM.OPTIMIZED_OPTIMAL:
+        var W = 0.8;
+        var n = areas.length;
+        var k = colors;
+        var s = new Summator(areas);
+        var avg_chunk = s.sum(0, n) / k;
+        var avg_len = n / k;
+        var sum_all = s.sum(0, n);
+
+        var best_error = create2dArray(n + 1, k);
+        var best_pivots = create2dArray(n + 1, k);
+
+        for (var m = 0; m <= n; m++) {
+          best_error[m][0] = diff(s.sum(0, m), avg_chunk) / sum_all + W * diff(m, avg_len) / n;
+          best_pivots[m][0] = [];
+        }
+
+        for (var p = 1; p < k; p++) {
+          var pivot = n;
+          for (var m = 0; m <= n; m++) {
+            var min_error = -1;
+            var best_pivot = -1;
+            for (var pivot = 0; pivot <= m; pivot++) {
+              var pivot_error = best_error[pivot][p - 1] + diff(s.sum(pivot, m), avg_chunk) / sum_all + W * diff(m - pivot, avg_len) / n;
+              if (pivot % 10 == 0) {
+              console.log("pivot_error: " + best_error[pivot][p - 1] + " + " + diff(s.sum(pivot, m), avg_chunk) / sum_all + " + W * " + (diff(m - pivot, avg_len) / n) + " = " + pivot_error)
+              }
+              if (min_error == -1 || pivot_error < min_error) {
+                min_error = pivot_error;
+                best_pivot = pivot;
+              }
+            }
+            best_error[m][p] = min_error;
+            best_pivots[m][p] = best_pivots[best_pivot][p - 1].concat([best_pivot]);
+          }
+        }
+
+        return best_pivots[n][k - 1].concat([areas.length]);
     }
   }
 
@@ -1546,7 +1586,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
   var U = 2;  // Upper bound on the chunk length or sum ratio.
   var L = 0.5;  // Lower bound on the chunk length ratio.
-  function getOptimizedPivots(numbers, start_index, num_chunks) {
+  function getOptimizedGreedyPivots(numbers, start_index, num_chunks) {
     if (num_chunks == 1) {
       return [numbers.length];
     }
@@ -1568,7 +1608,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       }
     }
 
-    var pivots = getOptimizedPivots(numbers, i + 1, num_chunks - 1);
+    var pivots = getOptimizedGreedyPivots(numbers, i + 1, num_chunks - 1);
     pivots.unshift(i + 1);
     return pivots;
   }
@@ -1637,7 +1677,8 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);
-      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED);
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);
       console.log("areas: " + areas);
       areas.forEach(function(a) {
         console.log(Math.round(a));
