@@ -1482,7 +1482,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         return getOptimizedGreedyPivots(areas, 0, colors);
 
       case ALGORITHM.OPTIMIZED_OPTIMAL:
-        var W = 1;
+        var W = 0.3;
         var n = areas.length;
         var k = colors;
         var s = new Summator(areas);
@@ -1494,7 +1494,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         var best_pivots = create2dArray(n + 1, k);
 
         for (var m = 0; m <= n; m++) {
-          best_error[m][0] = Math.pow(diff(s.sum(0, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m, avg_len) / n, 2);
+          best_error[m][0] = (1 - W) * Math.pow(diff(s.sum(0, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m, avg_len) / n, 2);
           best_pivots[m][0] = [];
         }
 
@@ -1504,7 +1504,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
             var min_error = -1;
             var best_pivot = -1;
             for (var pivot = 0; pivot <= m; pivot++) {
-              var pivot_error = best_error[pivot][p - 1] + Math.pow(diff(s.sum(pivot, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m - pivot, avg_len) / n, 2);
+              var pivot_error = best_error[pivot][p - 1] + (1 - W) * Math.pow(diff(s.sum(pivot, m), avg_chunk) / sum_all, 2) + W * Math.pow(diff(m - pivot, avg_len) / n, 2);
               if (min_error == -1 || pivot_error < min_error) {
                 min_error = pivot_error;
                 best_pivot = pivot;
@@ -1641,7 +1641,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);
       var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
-      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);
 
       var index = 0;
       var pivot = 0;
