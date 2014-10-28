@@ -5,6 +5,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&file=api&v=3&key=AIzaSyAiFwu5PlyBfBvRaWHHm0dsKIZF1OIngjs"></script>
 <script src="http://code.jquery.com/jquery-2.0.3.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="/stylesheets/jquery.autosize.js"></script>
 <script src="/stylesheets/jquery.tsv-0.957.js"></script>
@@ -114,15 +115,16 @@ div.tooltip {
 			<div>
 				<span>Samples:</span>
 				<button type="button" onclick="fillSampleData(1)">Countries</button>
-				<button type="button" onclick="fillSampleData(2)">Highest point</button>
-				<button type="button" onclick="fillSampleData(3)">Europe</button>
-				<button type="button" onclick="fillSampleData(4)">States info</button>
-				<button type="button" onclick="fillSampleData(5)">States beer/food</button>
-				<button type="button" onclick="fillSampleData(6)">Visited Markers</button>
-				<button type="button" onclick="fillSampleData(7)">Visited Locations</button>
-				<button type="button" onclick="fillSampleData(8)">Trip</button>
-				<button type="button" onclick="fillSampleData(9)">Colonization after WW1</button>
-				<button type="button" onclick="fillSampleData(10)">Colonization Regions</button>
+                <button type="button" onclick="fillSampleData(2)">Countries2</button>
+                <button type="button" onclick="fillSampleData(3)">Highest point</button>
+				<button type="button" onclick="fillSampleData(4)">Europe</button>
+				<button type="button" onclick="fillSampleData(5)">States info</button>
+				<button type="button" onclick="fillSampleData(6)">States beer/food</button>
+				<button type="button" onclick="fillSampleData(7)">Visited Markers</button>
+				<button type="button" onclick="fillSampleData(8)">Visited Locations</button>
+				<button type="button" onclick="fillSampleData(9)">Trip</button>
+				<button type="button" onclick="fillSampleData(10)">Colonization after WW1</button>
+				<button type="button" onclick="fillSampleData(11)">Colonization Regions</button>
 			</div>
 			<div>
 				<button type="button" onclick="processTSV();">Visualize!</button>
