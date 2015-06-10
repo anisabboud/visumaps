@@ -1,0 +1,148 @@
+<!-- Bootstrap v3.0.3 -->
+<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+<section class="container" id="Survey" style="margin-bottom:15px; padding: 10px 10px; font-family: Verdana, Geneva, sans-serif; color:#333333; font-size:0.9em;">
+<div class="row col-xs-12 col-md-12"><!-- Instructions -->
+<div class="panel panel-primary">
+<div class="panel-heading"><strong>Instructions</strong></div>
+
+<div class="panel-body">
+<p>
+It is common to visualize data that varies across different countries on a map, such that regions with a higher value are assigned a darker color.
+</p>
+<p>
+Assuming that we are using 5 colors, there are various methods to group the data into 5 groups for the color assignment. In this survey, we are comparing 4 different methods.
+</p>
+<p>
+Below you will find a simple table of countries and their population <b>density (how many people live in a square kilometer on average)</b>.
+</p>
+<p>
+After that, you will see 4 maps, all presenting the <b>same information</b> from the table, but the coloring (ranges/legend) is done differently.
+</p>
+<p>
+We will ask you two simple questions on each map, and finally two questions to compare the different maps.
+</p>
+
+</div>
+</div>
+<!-- End Instructions --><!-- Survey Body -->
+
+<section>
+
+<label>Population density table</label>
+<div><img src="http://i.imgur.com/PHnjF9P.png" /></div>
+<hr>
+
+<!-- Map E. -->
+<div><img class="map" src="http://i.imgur.com/7LwiWtC.png" /></div>
+<fieldset><label>1. How well do you think the color assignment on the map reflects the different population density ranges?</label>
+<span class="radio"><label><input name="MapE_Q1" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapE_Q1" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapE_Q1" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<fieldset><label>2. How well does the map represent the difference in population density of neighboring countries?</label>
+<span class="radio"><label><input name="MapE_Q2" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapE_Q2" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapE_Q2" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<hr>
+
+<!-- Map F. -->
+<div><img class="map" src="http://i.imgur.com/mI3mI0K.png" /></div>
+<fieldset><label>3. How well do you think the color assignment on the map reflects the different population density ranges?</label>
+<span class="radio"><label><input name="MapF_Q1" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapF_Q1" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapF_Q1" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<fieldset><label>4. How well does the map represent the difference in population density of neighboring countries?</label>
+<span class="radio"><label><input name="MapF_Q2" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapF_Q2" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapF_Q2" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<hr>
+
+<!-- Map G. -->
+<div><img class="map" src="http://i.imgur.com/zToSXMz.png" /></div>
+<fieldset><label>5. How well do you think the color assignment on the map reflects the different population density ranges?</label>
+<span class="radio"><label><input name="MapG_Q1" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapG_Q1" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapG_Q1" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<fieldset><label>6. How well does the map represent the difference in population density of neighboring countries?</label>
+<span class="radio"><label><input name="MapG_Q2" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapG_Q2" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapG_Q2" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<hr>
+
+<!-- Map H. -->
+<div><img class="map" src="http://i.imgur.com/5g8UoxM.png" /></div>
+<fieldset><label>7. How well do you think the color assignment on the map reflects the different population density ranges?</label>
+<span class="radio"><label><input name="MapH_Q1" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapH_Q1" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapH_Q1" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<fieldset><label>8. How well does the map represent the difference in population density of neighboring countries?</label>
+<span class="radio"><label><input name="MapH_Q2" type="radio" value="Poorly" />Poorly</label></span>
+<span class="radio"><label><input name="MapH_Q2" type="radio" value="Average" />Average</label></span>
+<span class="radio"><label><input name="MapH_Q2" type="radio" value="Well" />Well</label></span>
+</fieldset>
+<hr>
+
+<!-- Maps A-D. -->
+<fieldset><label>9. Which two maps do you think are best?</label>
+<div>Best map:
+<span class="radio"><label><input name="MapsEFGH_Rank1" type="radio" value="E" />E</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank1" type="radio" value="F" />F</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank1" type="radio" value="G" />G</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank1" type="radio" value="H" />H</label></span>
+</div>
+<div>Second best map:
+<span class="radio"><label><input name="MapsEFGH_Rank2" type="radio" value="E" />E</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank2" type="radio" value="F" />F</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank2" type="radio" value="G" />G</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank2" type="radio" value="H" />H</label></span>
+</div>
+<div>
+Why?
+<textarea class="form-control" cols="120" name="MapsEFGH_Rank12_Why" rows="5"></textarea>
+</div>
+</fieldset>
+
+<fieldset><label>10. Which map do you think is worst?</label>
+<span class="radio"><label><input name="MapsEFGH_Rank4" type="radio" value="E" />E</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank4" type="radio" value="F" />F</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank4" type="radio" value="G" />G</label></span>
+<span class="radio"><label><input name="MapsEFGH_Rank4" type="radio" value="H" />H</label></span>
+<div>
+Why?
+<textarea class="form-control" cols="120" name="MapsEFGH_Rank4_Why" rows="5"></textarea>
+</div>
+</fieldset>
+<hr>
+
+<div>Thank you! I appreciate your time and help.</div>
+
+</section>
+<!-- End Survey Body --></div>
+</section>
+<!-- close container -->
+<style type="text/css">
+fieldset {
+    padding: 10px;
+    background:#fbfbfb;
+    border-radius:5px;
+    margin-bottom:5px;
+}
+span.radio {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: baseline;
+}
+img.map {
+  width: 100%;
+  margin: 20px 0 10px;
+}
+hr {
+  margin: 30px 0;
+}
+</style>

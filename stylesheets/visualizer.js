@@ -274,202 +274,202 @@ sampleData[1] =
     'Zimbabwe	12754378	Harare	English',
    ].join('\n');
 
-sampleData[2] = 
-   ['Country	Population	Population Density (sq km)',
-    'Vatican City	800	800.00',
-    'Nauru	10000	476.19',
-    'Tuvalu	10000	384.62',
-    'Palau	20000	43.67',
-    'San Marino	32386	530.92',
-    'Monaco	33000	16500.00',
-    'Liechtenstein	35904	224.40',
-    'Saint Kitts & Nevis	38960	149.27',
-    'Greenland	56840	0.14',
-    'Marshall Islands	63000	348.07',
-    'Dominica	67000	88.86',
-    'Andorra	84082	179.66',
-    'Seychelles	85000	186.81',
-    'Antigua & Barbuda	89000	200.90',
-    'Kiribati	100000	123.30',
-    'Grenada	104000	302.33',
-    'Tonga	104000	139.04',
-    'St. Vincent & the Grenadines	109000	280.21',
-    'Micronesia	111000	158.12',
-    'Sao Tome & Principe	165000	164.84',
-    'Saint Lucia	174000	282.47',
-    'Samoa	179000	60.80',
-    'Vanuatu	246000	20.16',
-    'Barbados	257000	596.29',
-    'Maldives	314000	1046.67',
-    'Iceland	317900	3.09',
-    'Belize	322100	14.03',
-    'Bahamas	346000	24.82',
-    'Brunei	407000	70.54',
-    'Malta	416333	1317.51',
-    'Luxembourg	502207	194.20',
-    'Cape Verde	513000	127.20',
-    'Suriname	524000	3.21',
-    'Solomon Islands	536000	18.84',
-    'Comoros	691000	318.43',
-    'Equatorial Guinea	693000	24.71',
-    'Bhutan	708000	15.06',
-    'Guyana	761000	3.54',
-    'Cyprus	801851	86.69',
-    'Bahrain	807000	1213.53',
-    'Fiji	854000	46.74',
-    'Djibouti	879000	38.22',
-    'East Timor	1171000	78.03',
-    'Swaziland	1202000	69.23',
-    'Mauritius	1297000	635.78',
-    'Estonia	1340021	29.63',
-    'Trinidad & Tobago	1344000	262.09',
-    'Gabon	1501000	5.61',
-    'Guinea-Bissau	1647000	45.60',
-    'Qatar	1696563	148.34',
-    'Gambia	1751000	154.96',
-    'Botswana	1978000	3.29',
-    'Macedonia	2048620	80.87',
-    'Slovenia	2062700	101.75',
-    'Lesotho	2084000	68.65',
-    'Namibia	2212000	2.68',
-    'Latvia	2237800	34.65',
-    'Jamaica	2730000	248.39',
-    'Mongolia	2768800	1.77',
-    'Oman	2905000	13.67',
-    'Kuwait	3051000	171.21',
-    'Albania	3195000	111.14',
-    'Armenia	3238000	108.66',
-    'Panama	3322576	42.49',
-    'Lithuania	3329227	51.06',
-    'Mauritania	3366000	3.27',
-    'Uruguay	3372000	19.14',
-    'Liberia	3476608	31.22',
-    'Moldova	3563800	105.30',
-    'Congo (Rep.)	3759000	10.99',
-    'Bosnia & Herzegovina	3760000	73.54',
-    'Lebanon	4255000	409.13',
-    'New Zealand	4383600	16.32',
-    'Croatia	4435056	78.44',
-    'Georgia	4436000	63.64',
-    'Ireland	4459300	63.45',
-    'Central African Republic	4506000	7.23',
-    'Costa Rica	4640000	90.80',
-    'United Arab Emirates	4707000	56.79',
-    'Norway	4896700	15.10',
-    'Singapore	4987600	7197.11',
-    'Turkmenistan	5177000	10.61',
-    'Eritrea	5224000	43.06',
-    'Finland	5366100	15.92',
-    'Slovakia	5426645	111.10',
-    'Denmark	5540241	128.56',
-    'Kyrgyzstan	5550000	27.96',
-    'Nicaragua	5822000	44.96',
-    'Sierra Leone	5836000	81.35',
-    'El Salvador	6194000	294.39',
-    'Laos	6436000	27.18',
-    'Paraguay	6460000	15.88',
-    'Jordan	6472000	70.12',
-    'Libya	6546000	3.72',
-    'Togo	6780000	119.40',
-    'Papua New Guinea	6888000	14.88',
-    'Tajikstan	7075000	49.44',
-    'Bulgaria	7576751	68.31',
-    'Israel	7602400	366.03',
-    'Honduras	7616000	67.95',
-    'Switzerland	7782900	188.49',
-    'South Sudan	8260490	13.32',
-    'Austria	8372930	99.85',
-    'Burundi	8519000	306.11',
-    'Azerbaijan	8997400	103.90',
-    'Benin	9212000	81.80',
-    'Somalia	9359000	14.68',
-    'Sweden	9366092	20.82',
-    'Belarus	9471900	45.63',
-    'Serbia & Montenegro	9856000	96.30',
-    'Hungary	10013628	107.64',
-    'Bolivia	10031000	9.13',
-    'Haiti	10188000	367.14',
-    'Dominican Republic	10225000	209.83',
-    'Rwanda	10277000	390.20',
-    'Guinea	10324000	41.99',
-    'Tunisia	10432500	63.76',
-    'Czech Republic	10512397	133.29',
-    'Portugal	10636888	115.13',
-    'Belgium	10827519	354.88',
-    'Cuba	11204000	101.06',
-    'Chad	11274106	8.78',
-    'Greece	11306183	85.69',
-    'Zimbabwe	12644000	32.37',
-    'Senegal	12861000	65.55',
-    'Zambia	13257000	17.61',
-    'Cambodia	13395682	73.99',
-    'Ecuador	14228000	50.18',
-    'Guatemala	14377000	132.03',
-    'Mali	14517176	11.71',
-    'Malawi	15692000	132.44',
-    'Niger	15891000	12.54',
-    'Kazakhstan	16197000	5.96',
-    'Burkina Faso	16287000	59.40',
-    'Netherlands	16609518	399.98',
-    'Chile	17114000	22.61',
-    'Angola	18993000	15.23',
-    'Cameroon	19958000	41.98',
-    'Sri Lanka	20410000	311.08',
-    'Madagascar	21146000	36.02',
-    'Romania	21466174	90.38',
-    'Cote d\'Ivoire	21571000	66.90',
-    'Syria	22505000	121.53',
-    'Mozambique	23406000	29.20',
-    'Australia	23480970	2.92',
-    'Korea (North)	23991000	199.03',
-    'Yemen	24256000	45.94',
-    'Ghana	24333000	101.62',
-    'Saudi Arabia	26246000	13.39',
-    'Uzbekistan	27794000	62.12',
-    'Malaysia	28306700	85.84',
-    'Venezuela	28888000	31.67',
-    'Afghanistan	29117000	44.97',
-    'Peru	29461933	22.92',
-    'Nepal	29853000	212.02',
-    'Iraq	31467000	72.00',
-    'Morocco	31892000	71.42',
-    'Sudan	31894000	16.40',
-    'Uganda	33796000	143.18',
-    'Canada	34207000	3.43',
-    'Algeria	35423000	14.87',
-    'Poland	38167329	122.06',
-    'Argentina	40518951	14.64',
-    'Kenya	40863000	70.13',
-    'Tanzania	45040000	47.66',
-    'Colombia	45569000	40.01',
-    'Ukraine	45871738	75.98',
-    'Spain	46951532	93.01',
-    'Korea (South)	49773145	505.41',
-    'South Africa	49991300	40.98',
-    'Myanmar	50496000	74.42',
-    'Italy	60340328	200.31',
-    'United Kingdom (UK)	62041708	253.42',
-    'Thailand	63525062	123.59',
-    'France	65447374	119.64',
-    'Congo (Dem. Rep. of )	67827000	28.92',
-    'Turkey	72561312	92.96',
-    'Iran	75078000	45.56',
-    'Egypt	78848000	78.73',
-    'Ethiopia	79221000	70.29',
-    'Germany	81757600	229.00',
-    'Vietnam	85789573	260.32',
-    'Phillipines	94013200	313.38',
-    'Mexico	108396211	54.95',
-    'Japan	127380000	337.13',
-    'Russia	141927297	8.31',
-    'Bangladesh	164425000	1141.84',
-    'Nigeria	170123000	171.32',
-    'Pakistan	170260000	211.78',
-    'Brazil	193364000	22.72',
-    'Indonesia	234181400	122.01',
-    'United States of America	309975000	32.19',
-    'India	1184639000	360.34',
-    'China	1339190000	139.54',
+sampleData[2] =
+   ['Country	Population	Population Density (sq km)	Average Area Per Person (acres)',
+    'Vatican City	800	800	0.309',
+    'Nauru	10000	476.19	0.519',
+    'Tuvalu	10000	384.62	0.642',
+    'Palau	20000	43.67	5.658',
+    'San Marino	32386	530.92	0.465',
+    'Monaco	33000	16500	0.015',
+    'Liechtenstein	35904	224.4	1.101',
+    'Saint Kitts & Nevis	38960	149.27	1.655',
+    'Greenland	56840	0.14	1765.036',
+    'Marshall Islands	63000	348.07	0.71',
+    'Dominica	67000	88.86	2.781',
+    'Andorra	84082	179.66	1.375',
+    'Seychelles	85000	186.81	1.323',
+    'Antigua & Barbuda	89000	200.9	1.23',
+    'Kiribati	100000	123.3	2.004',
+    'Grenada	104000	302.33	0.817',
+    'Tonga	104000	139.04	1.777',
+    'St. Vincent & the Grenadines	109000	280.21	0.882',
+    'Micronesia	111000	158.12	1.563',
+    'Sao Tome & Principe	165000	164.84	1.499',
+    'Saint Lucia	174000	282.47	0.875',
+    'Samoa	179000	60.8	4.064',
+    'Vanuatu	246000	20.16	12.257',
+    'Barbados	257000	596.29	0.414',
+    'Maldives	314000	1046.67	0.236',
+    'Iceland	317900	3.09	79.969',
+    'Belize	322100	14.03	17.613',
+    'Bahamas	346000	24.82	9.956',
+    'Brunei	407000	70.54	3.503',
+    'Malta	416333	1317.51	0.188',
+    'Luxembourg	502207	194.2	1.272',
+    'Cape Verde	513000	127.2	1.943',
+    'Suriname	524000	3.21	76.98',
+    'Solomon Islands	536000	18.84	13.116',
+    'Comoros	691000	318.43	0.776',
+    'Equatorial Guinea	693000	24.71	10',
+    'Bhutan	708000	15.06	16.408',
+    'Guyana	761000	3.54	69.804',
+    'Cyprus	801851	86.69	2.85',
+    'Bahrain	807000	1213.53	0.204',
+    'Fiji	854000	46.74	5.287',
+    'Djibouti	879000	38.22	6.465',
+    'East Timor	1171000	78.03	3.167',
+    'Swaziland	1202000	69.23	3.569',
+    'Mauritius	1297000	635.78	0.389',
+    'Estonia	1340021	29.63	8.34',
+    'Trinidad & Tobago	1344000	262.09	0.943',
+    'Gabon	1501000	5.61	44.047',
+    'Guinea-Bissau	1647000	45.6	5.419',
+    'Qatar	1696563	148.34	1.666',
+    'Gambia	1751000	154.96	1.595',
+    'Botswana	1978000	3.29	75.108',
+    'Macedonia	2048620	80.87	3.056',
+    'Slovenia	2062700	101.75	2.429',
+    'Lesotho	2084000	68.65	3.599',
+    'Namibia	2212000	2.68	92.203',
+    'Latvia	2237800	34.65	7.131',
+    'Jamaica	2730000	248.39	0.995',
+    'Mongolia	2768800	1.77	139.607',
+    'Oman	2905000	13.67	18.076',
+    'Kuwait	3051000	171.21	1.443',
+    'Albania	3195000	111.14	2.223',
+    'Armenia	3238000	108.66	2.274',
+    'Panama	3322576	42.49	5.816',
+    'Lithuania	3329227	51.06	4.84',
+    'Mauritania	3366000	3.27	75.567',
+    'Uruguay	3372000	19.14	12.91',
+    'Liberia	3476608	31.22	7.915',
+    'Moldova	3563800	105.3	2.347',
+    'Congo (Rep.)	3759000	10.99	22.485',
+    'Bosnia & Herzegovina	3760000	73.54	3.36',
+    'Lebanon	4255000	409.13	0.604',
+    'New Zealand	4383600	16.32	15.141',
+    'Croatia	4435056	78.44	3.15',
+    'Georgia	4436000	63.64	3.883',
+    'Ireland	4459300	63.45	3.894',
+    'Central African Republic	4506000	7.23	34.178',
+    'Costa Rica	4640000	90.8	2.721',
+    'United Arab Emirates	4707000	56.79	4.351',
+    'Norway	4896700	15.1	16.365',
+    'Singapore	4987600	7197.11	0.034',
+    'Turkmenistan	5177000	10.61	23.29',
+    'Eritrea	5224000	43.06	5.739',
+    'Finland	5366100	15.92	15.522',
+    'Slovakia	5426645	111.1	2.224',
+    'Denmark	5540241	128.56	1.922',
+    'Kyrgyzstan	5550000	27.96	8.838',
+    'Nicaragua	5822000	44.96	5.496',
+    'Sierra Leone	5836000	81.35	3.038',
+    'El Salvador	6194000	294.39	0.839',
+    'Laos	6436000	27.18	9.091',
+    'Paraguay	6460000	15.88	15.561',
+    'Jordan	6472000	70.12	3.524',
+    'Libya	6546000	3.72	66.426',
+    'Togo	6780000	119.4	2.07',
+    'Papua New Guinea	6888000	14.88	16.607',
+    'Tajikstan	7075000	49.44	4.998',
+    'Bulgaria	7576751	68.31	3.617',
+    'Israel	7602400	366.03	0.675',
+    'Honduras	7616000	67.95	3.637',
+    'Switzerland	7782900	188.49	1.311',
+    'South Sudan	8260490	13.32	18.551',
+    'Austria	8372930	99.85	2.475',
+    'Burundi	8519000	306.11	0.807',
+    'Azerbaijan	8997400	103.9	2.378',
+    'Benin	9212000	81.8	3.021',
+    'Somalia	9359000	14.68	16.833',
+    'Sweden	9366092	20.82	11.869',
+    'Belarus	9471900	45.63	5.415',
+    'Serbia & Montenegro	9856000	96.3	2.566',
+    'Hungary	10013628	107.64	2.296',
+    'Bolivia	10031000	9.13	27.065',
+    'Haiti	10188000	367.14	0.673',
+    'Dominican Republic	10225000	209.83	1.178',
+    'Rwanda	10277000	390.2	0.633',
+    'Guinea	10324000	41.99	5.885',
+    'Tunisia	10432500	63.76	3.876',
+    'Czech Republic	10512397	133.29	1.854',
+    'Portugal	10636888	115.13	2.146',
+    'Belgium	10827519	354.88	0.696',
+    'Cuba	11204000	101.06	2.445',
+    'Chad	11274106	8.78	28.144',
+    'Greece	11306183	85.69	2.884',
+    'Zimbabwe	12644000	32.37	7.634',
+    'Senegal	12861000	65.55	3.77',
+    'Zambia	13257000	17.61	14.032',
+    'Cambodia	13395682	73.99	3.34',
+    'Ecuador	14228000	50.18	4.924',
+    'Guatemala	14377000	132.03	1.872',
+    'Mali	14517176	11.71	21.102',
+    'Malawi	15692000	132.44	1.866',
+    'Niger	15891000	12.54	19.705',
+    'Kazakhstan	16197000	5.96	41.461',
+    'Burkina Faso	16287000	59.4	4.16',
+    'Netherlands	16609518	399.98	0.618',
+    'Chile	17114000	22.61	10.929',
+    'Angola	18993000	15.23	16.225',
+    'Cameroon	19958000	41.98	5.886',
+    'Sri Lanka	20410000	311.08	0.794',
+    'Madagascar	21146000	36.02	6.86',
+    'Romania	21466174	90.38	2.734',
+    'Cote d\'Ivoire	21571000	66.9	3.694',
+    'Syria	22505000	121.53	2.033',
+    'Mozambique	23406000	29.2	8.463',
+    'Australia	23480970	2.92	84.625',
+    'Korea (North)	23991000	199.03	1.242',
+    'Yemen	24256000	45.94	5.379',
+    'Ghana	24333000	101.62	2.432',
+    'Saudi Arabia	26246000	13.39	18.454',
+    'Uzbekistan	27794000	62.12	3.978',
+    'Malaysia	28306700	85.84	2.879',
+    'Venezuela	28888000	31.67	7.802',
+    'Afghanistan	29117000	44.97	5.495',
+    'Peru	29461933	22.92	10.781',
+    'Nepal	29853000	212.02	1.165',
+    'Iraq	31467000	72	3.432',
+    'Morocco	31892000	71.42	3.46',
+    'Sudan	31894000	16.4	15.067',
+    'Uganda	33796000	143.18	1.726',
+    'Canada	34207000	3.43	72.042',
+    'Algeria	35423000	14.87	16.618',
+    'Poland	38167329	122.06	2.024',
+    'Argentina	40518951	14.64	16.879',
+    'Kenya	40863000	70.13	3.524',
+    'Tanzania	45040000	47.66	5.185',
+    'Colombia	45569000	40.01	6.176',
+    'Ukraine	45871738	75.98	3.252',
+    'Spain	46951532	93.01	2.657',
+    'Korea (South)	49773145	505.41	0.489',
+    'South Africa	49991300	40.98	6.03',
+    'Myanmar	50496000	74.42	3.32',
+    'Italy	60340328	200.31	1.234',
+    'United Kingdom (UK)	62041708	253.42	0.975',
+    'Thailand	63525062	123.59	1.999',
+    'France	65447374	119.64	2.065',
+    'Congo (Dem. Rep. of )	67827000	28.92	8.544',
+    'Turkey	72561312	92.96	2.658',
+    'Iran	75078000	45.56	5.424',
+    'Egypt	78848000	78.73	3.139',
+    'Ethiopia	79221000	70.29	3.516',
+    'Germany	81757600	229	1.079',
+    'Vietnam	85789573	260.32	0.949',
+    'Phillipines	94013200	313.38	0.789',
+    'Mexico	108396211	54.95	4.497',
+    'Japan	127380000	337.13	0.733',
+    'Russia	141927297	8.31	29.736',
+    'Bangladesh	164425000	1141.84	0.216',
+    'Nigeria	170123000	171.32	1.442',
+    'Pakistan	170260000	211.78	1.167',
+    'Brazil	193364000	22.72	10.876',
+    'Indonesia	234181400	122.01	2.025',
+    'United States of America	309975000	32.19	7.676',
+    'India	1184639000	360.34	0.686',
+    'China	1339190000	139.54	1.771',
    ].join('\n');
 
 sampleData[3] = 
@@ -1011,11 +1011,14 @@ function processTSV() {
       $('#charts_div').empty();
       for (var t = 0; t < tables.length; t++) {
         $('#charts_div').append(
-              '<h1 style="padding-left: 10px">' + tables[t][0][1] + '</h1>');
+              '<h1>' +
+              '<span style="padding-left: 10px">' + tables[t][0][1] + '</span>' +
+              '<span class="W" style="margin-left: 50px; color: #0BF"></span>' +
+              '</h1>');
         $('#charts_div').append(
               '<div id="chart_div' + t + '" class="map_container"></div>');
         $('#charts_div').append(
-          '<div id="chart_legend' + t + '" style="width: 1050px"></div><hr />');
+          '<div id="chart_legend' + t + '" class="legend_container"></div><hr />');
         drawRegionsMap(tables[t], t, geocoded_locations);
       }
     }
@@ -1542,13 +1545,16 @@ function addInfoWindow(map, marker, message) {
 
 // Code inspired by http://techslides.com/d3-map-starter-kit/
 function fillMap(container_id, table, geocoded_locations, column_name, legend_container) {
-  d3.select(window).on("resize", throttle);
+
+  d3.select(window).on("resize." + container_id, redrawThrottle);
+  // $('#' + container_id).redraw(redrawThrottle);
+  $(document).on('redraw', redrawThrottle);
 
   var throttleTimer;
-  function throttle() {
+  function redrawThrottle() {
       window.clearTimeout(throttleTimer);
       throttleTimer = window.setTimeout(function() {
-          redraw();
+          redraw(container_id, topo);
       }, 200);
   }
 
@@ -1592,7 +1598,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       var countries = topojson.feature(world, world.objects.countries).features;
 
       topo = countries;
-      draw(topo);
+      draw(container_id, topo, width, height);
   });
 
   function Summator(numbers) {
@@ -1626,6 +1632,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
                    'HEAD_TAIL_BREAKS': 7,
                    'OPTIMIZED_GREEDY': 8,
                    'OPTIMIZED_OPTIMAL': 9,
+                   'BELL_CURVE': 10,
                   }
   function getPivots(areas, values, colors, algorithm) {
     var pivots = [];
@@ -1686,7 +1693,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         //return getOptimizedGreedyPivotsSimplified(areas, colors);
 
       case ALGORITHM.OPTIMIZED_OPTIMAL:
-        var W = 0.5;
+        var W = !!localStorage.W ? Number(localStorage.W) : 0;
         var n = areas.length;
         var k = colors;
         var s = new Summator(areas);
@@ -1719,6 +1726,14 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
         }
 
         return best_pivots[n][k - 1].concat([areas.length]);
+
+      case ALGORITHM.BELL_CURVE:
+        pivots = [20,
+                  40,
+                  areas.length - 40,
+                  areas.length - 20,
+                  areas.length];
+        return pivots;
     }
   }
 
@@ -1780,7 +1795,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
     return pivots;
   }
 
-  function draw(topo) {
+  function draw(container_id, topo, width, height) {
       svg.append("path")
           .datum(graticule)
           .attr("class", "graticule")
@@ -1831,9 +1846,9 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
       // Legend - Part A.
       var LEGEND_WIDTH = 350;
-      legendDiv = '<div style="margin-left: 10px">';
-      legendDiv += '<div style="display: inline-block; padding-right: 10px">' + column_name + ':</div>';
-      legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
+      legendDiv = '<div>';
+      // legendDiv += '<div style="display: inline-block; padding-right: 10px">' + column_name + ':</div>';
+      // legendDiv += '<div style="display: inline-block">' + commafy(table[0][1]) + '</div>';
 
       var color_dict = {};
       var COLORS = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];  // 5 colors.
@@ -1845,9 +1860,9 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
       var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);  // 4
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.BELL_CURVE);  // 5
 
-      console.log("anis");
-      console.log(areas);
+      // console.log(areas);
 
       var index = 0;
       var pivot = 0;
@@ -1856,18 +1871,25 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
           color_dict[geonameIds[index]] = COLORS[pivot];
           // Legend - Part B.
           legendDiv += 
-             '<div style="background-color: ' + COLORS[pivot] + '; width: ' + 
-             Math.round(LEGEND_WIDTH / table.length) + 
+             '<div style="background-color: ' + COLORS[pivot] + '; width: ' +
+             Math.round(LEGEND_WIDTH / table.length) +
              'px; height: 15px; display: inline-block"> </div>';
           index++;
         }
         pivot++;
       }
       // Legend - Part C.
-      legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
+      // legendDiv += '<div style="display: inline-block">' + commafy(table[table.length - 1][1]) + '</div>';
+      legendDiv += '<span style="vertical-align: text-bottom"> (The <i>width</i> of each color in this scale is proportional to the <i>number of countries</i> colored with that color.)</span>';
       legendDiv += '</div>';
       // Legend - Part D.
+      legendDiv += '<div style="background-color: white; position: absolute; bottom: 42px">'
       legendDiv += '<b>Legend:</b><table>';
+      console.log(pivots);
+      console.log(values[0]);
+      for (var i = 0; i < pivots.length; i++) {
+        console.log(values[pivots[i]]);
+      }
       for (var i = 0; i < pivots.length; i++) {
         legendDiv += '<tr><td style="width: 100px; background-color: ' + COLORS[i] + '"></td><td style="text-align:right">' 
             + commafy(i == 0 ? values[0] : values[pivots[i - 1]]) 
@@ -1875,6 +1897,8 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
             + commafy(values[pivots[i] - 1]);
       }
       legendDiv += '</table>';
+      legendDiv += '</div>'
+      $(legend_container).empty();
       $(legend_container).append(legendDiv);
 
       var country = g.selectAll(".country").data(topo);
@@ -1925,12 +1949,13 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
   }
 
-  function redraw() {
+  function redraw(container_id, topo) {
+      console.log('redraw()');
       width = document.getElementById(container_id).offsetWidth;
       height = width * 0.5; // / 2;
-      d3.select('svg').remove();
+      d3.select("#" + container_id).select('svg').remove();
       setup(width, height);
-      draw(topo);
+      draw(container_id, topo, width, height);
   }
 
   function move() {

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src='https://www.google.com/jsapi'></script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&file=api&v=3&key=AIzaSyAiFwu5PlyBfBvRaWHHm0dsKIZF1OIngjs"></script>
-<script src="http://code.jquery.com/jquery-2.0.3.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -12,6 +15,38 @@
 <script src="/stylesheets/rainbowvis.js"></script>
 <script src="/stylesheets/custom-overlay.js"></script>
 <script src="/stylesheets/jenks.js"></script>
+<script>
+function updateW(W) { 
+  localStorage.W = W;
+  $('.W').each(function() {
+    $(this).text('W = ' + W);
+  });
+
+  $.event.trigger({
+    type: "redraw"
+  });
+}
+
+$(function() {
+  var W = !!localStorage.W ? Number(localStorage.W) : 0;
+  updateW(W);
+
+  $('.slider').slider({
+    min: 0,
+    max: 1,
+    step: 0.1,
+    value: W,
+    slide: function(event, ui) {
+      updateW(ui.value);
+    }
+  });
+
+  $('#check').button();
+  $('#check').bind('change', function() {
+    $('.country').css('stroke', $(this).is(':checked') ? 'white' : 'black');
+  });
+});
+</script>
 <meta charset='utf-8'>
 <title>VisuMaps - Visualize data on Maps</title>
 <style>
@@ -83,6 +118,10 @@ textarea {
     overflow: hidden;
     //background: #F0F8FF;
 }
+.legend_container {
+  position: relative; 
+  margin-left: 10px;
+}
 .hidden {
     display: none;
 }
@@ -106,6 +145,11 @@ div.tooltip {
     stroke: #ccc;
     stroke-width: 0px;
 }
+.slider {
+  display: inline-block;
+  width: 25%; 
+  margin: 0 auto;
+}
 </style>
 </head>
 <body>
@@ -115,8 +159,8 @@ div.tooltip {
 			<div>
 				<span>Samples:</span>
 				<button type="button" onclick="fillSampleData(1)">Countries</button>
-                <button type="button" onclick="fillSampleData(2)">Countries2</button>
-                <button type="button" onclick="fillSampleData(3)">Highest point</button>
+        <button type="button" onclick="fillSampleData(2)">Countries2</button>
+        <button type="button" onclick="fillSampleData(3)">Highest point</button>
 				<button type="button" onclick="fillSampleData(4)">Europe</button>
 				<button type="button" onclick="fillSampleData(5)">States info</button>
 				<button type="button" onclick="fillSampleData(6)">States beer/food</button>
@@ -131,12 +175,15 @@ div.tooltip {
 				<button type="reset" onclick="fillSampleData(0)">Clear</button>
 			</div>
 			<div>
-				<textarea id="data"
-					placeholder="Enter TSV (tab-separated values) data table (or copy-paste from a Google Spreadsheet)"></textarea>
+				<textarea id="data" style="margin: 5px 0"
+					placeholder="Enter TSV (tab-separated values) data table (or copy-paste from a spreadsheet)"></textarea>
 			</div>
 			<div>
 				<button type="button" onclick="processTSV();">Visualize!</button>
 				<button type="reset" onclick="fillSampleData(0)">Clear</button>
+        <span class="W" style="display: inline-block; width: 100px; text-align: center; color:#f92"></span>
+        <span class="slider"></span>
+        <input type="checkbox" id="check"><label for="check" style="margin: 0 50px">White borders</label>
 			</div>
 		</form>
 

@@ -1,0 +1,237 @@
+<!-- Bootstrap v3.0.3 -->
+<link rel="stylesheet" href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+function slide(usecase, W) {
+  $('.map').each(function() {
+    if ($(this).attr('id').startsWith(usecase)) {
+      if ($(this).attr('id') === usecase + "_W=" + W) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    }
+  });
+}
+
+$(function() {
+  if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+      return this.indexOf(str) === 0;
+    };
+  }
+
+  $('.slider').slider({
+    min: 0,
+    max: 1,
+    step: 0.1,
+    value: 0,
+    slide: function(event, ui) {
+      slide($(this).attr('id'), ui.value);
+    }
+  });
+  $('.slider').each(function() {
+    slide($(this).attr('id'), $(this).slider("value"));
+  });
+});
+</script>
+<section class="container" id="Survey" style="margin-bottom:15px; padding: 10px 10px; font-family: Verdana, Geneva, sans-serif; color:#333333; font-size:0.9em;">
+<div class="row col-xs-12 col-md-12"><!-- Instructions -->
+<div class="panel panel-primary">
+<div class="panel-heading"><strong>Instructions</strong></div>
+
+<div class="panel-body">
+<p>It is common to visualize data that varies across different countries on a map, such that regions with a higher value are assigned a darker color.</p>
+<p>Assuming that we are using 5 colors, there are various methods to group the data into 5 groups for the color assignment.</p>
+<ul>
+  <li>[W = 0] Each color occupies a roughly equal area on the screen.</li>
+  <li>[W = 1] Each color is used for the same number of countries. (For example, if we have 200 countries, each color will be used for 40.)</li>
+  <li>[0 &lt; W &lt; 1] A mixture between the two above. (Trying to strike a balance between the two methods.)</li>
+</ul>
+<p>Move the blue interactive slider above the map to see how changing the value of W affects the result.</p>
+<p>Note that regardless of the value of W, the map is presenting the <b>same information</b>, but the coloring (ranges/legend) is done differently.</p>
+</div>
+</div>
+<!-- End Instructions -->
+<!-- Survey Body -->
+
+<!-- Population, BlackBorders. -->
+<section>
+<div class="slider" id="Population_BlackBorders"></div>
+<div>
+  <img class="map" id="Population_BlackBorders_W=0"   src="http://i.imgur.com/QDBYfnI.png" />
+  <img class="map" id="Population_BlackBorders_W=0.1" src="http://i.imgur.com/PVMfY5t.png" />
+  <img class="map" id="Population_BlackBorders_W=0.2" src="http://i.imgur.com/hKjtubP.png" />
+  <img class="map" id="Population_BlackBorders_W=0.3" src="http://i.imgur.com/5Gp31DQ.png" />
+  <img class="map" id="Population_BlackBorders_W=0.4" src="http://i.imgur.com/nhYAAXw.png" />
+  <img class="map" id="Population_BlackBorders_W=0.5" src="http://i.imgur.com/BIEsE7p.png" />
+  <img class="map" id="Population_BlackBorders_W=0.6" src="http://i.imgur.com/n7vsZlf.png" />
+  <img class="map" id="Population_BlackBorders_W=0.7" src="http://i.imgur.com/CpdebW6.png" />
+  <img class="map" id="Population_BlackBorders_W=0.8" src="http://i.imgur.com/UtiKXx2.png" />
+  <img class="map" id="Population_BlackBorders_W=0.9" src="http://i.imgur.com/7GqhJ5i.png" />
+  <img class="map" id="Population_BlackBorders_W=1"   src="http://i.imgur.com/XwwGAI8.png" />
+</div>
+<fieldset><label>1. Which value for W do you think is best for Population?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Population_BlackBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Population_BlackBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+<!-- Population, WhiteBorders. -->
+<section>
+<div class="slider" id="Population_WhiteBorders"></div>
+<div>
+  <img class="map" id="Population_WhiteBorders_W=0"   src="http://i.imgur.com/oQBgMLM.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.1" src="http://i.imgur.com/LmZVr4n.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.2" src="http://i.imgur.com/VvlYNaf.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.3" src="http://i.imgur.com/SywxELY.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.4" src="http://i.imgur.com/U76aXEY.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.5" src="http://i.imgur.com/nhK5DpS.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.6" src="http://i.imgur.com/ywzWFVC.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.7" src="http://i.imgur.com/eXRSH3t.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.8" src="http://i.imgur.com/pg6jNYs.png" />
+  <img class="map" id="Population_WhiteBorders_W=0.9" src="http://i.imgur.com/nhlWZPB.png" />
+  <img class="map" id="Population_WhiteBorders_W=1"   src="http://i.imgur.com/6dZPBqi.png" />
+</div>
+<fieldset><label>2. Which value for W do you think is best for Population?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Population_WhiteBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Population_WhiteBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+<!-- Density, BlackBorders. -->
+<section>
+<div class="slider" id="Density_BlackBorders"></div>
+<div>
+  <img class="map" id="Density_BlackBorders_W=0"   src="http://i.imgur.com/oqlch9l.png" />
+  <img class="map" id="Density_BlackBorders_W=0.1" src="http://i.imgur.com/gB2JmFA.png" />
+  <img class="map" id="Density_BlackBorders_W=0.2" src="http://i.imgur.com/FqcOi6d.png" />
+  <img class="map" id="Density_BlackBorders_W=0.3" src="http://i.imgur.com/QwgxYNH.png" />
+  <img class="map" id="Density_BlackBorders_W=0.4" src="http://i.imgur.com/wBOLkp5.png" />
+  <img class="map" id="Density_BlackBorders_W=0.5" src="http://i.imgur.com/aGt5S61.png" />
+  <img class="map" id="Density_BlackBorders_W=0.6" src="http://i.imgur.com/Uq6oQ2y.png" />
+  <img class="map" id="Density_BlackBorders_W=0.7" src="http://i.imgur.com/vKRPfce.png" />
+  <img class="map" id="Density_BlackBorders_W=0.8" src="http://i.imgur.com/hK4TQdo.png" />
+  <img class="map" id="Density_BlackBorders_W=0.9" src="http://i.imgur.com/4O2j2jO.png" />
+  <img class="map" id="Density_BlackBorders_W=1"   src="http://i.imgur.com/moyJ2d7.png" />
+</div>
+<fieldset><label>3. Which value for W do you think is best for Population Density?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Density_BlackBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Density_BlackBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+<!-- Density, WhiteBorders. -->
+<section>
+<div class="slider" id="Density_WhiteBorders"></div>
+<div>
+  <img class="map" id="Density_WhiteBorders_W=0"   src="http://i.imgur.com/T6g1zwG.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.1" src="http://i.imgur.com/SjU2Oq9.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.2" src="http://i.imgur.com/uiskSQc.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.3" src="http://i.imgur.com/s0VvKbN.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.4" src="http://i.imgur.com/PpbfBIs.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.5" src="http://i.imgur.com/vlrv8k0.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.6" src="http://i.imgur.com/RFvC8yC.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.7" src="http://i.imgur.com/z9ZWCtZ.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.8" src="http://i.imgur.com/vvhZaKu.png" />
+  <img class="map" id="Density_WhiteBorders_W=0.9" src="http://i.imgur.com/5a0wJ5n.png" />
+  <img class="map" id="Density_WhiteBorders_W=1"   src="http://i.imgur.com/etX3U18.png" />
+</div>
+<fieldset><label>4. Which value for W do you think is best for Population Density?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Density_WhiteBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Density_WhiteBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+<!-- Area, BlackBorders. -->
+<section>
+<div class="slider" id="Area_BlackBorders"></div>
+<div>
+  <img class="map" id="Area_BlackBorders_W=0"   src="http://i.imgur.com/gQDneVT.png" />
+  <img class="map" id="Area_BlackBorders_W=0.1" src="http://i.imgur.com/NkHPUMT.png" />
+  <img class="map" id="Area_BlackBorders_W=0.2" src="http://i.imgur.com/sHPfIhZ.png" />
+  <img class="map" id="Area_BlackBorders_W=0.3" src="http://i.imgur.com/ewIXhaT.png" />
+  <img class="map" id="Area_BlackBorders_W=0.4" src="http://i.imgur.com/MTSq16z.png" />
+  <img class="map" id="Area_BlackBorders_W=0.5" src="http://i.imgur.com/LzWd29p.png" />
+  <img class="map" id="Area_BlackBorders_W=0.6" src="http://i.imgur.com/w6Hwqji.png" />
+  <img class="map" id="Area_BlackBorders_W=0.7" src="http://i.imgur.com/9uounuj.png" />
+  <img class="map" id="Area_BlackBorders_W=0.8" src="http://i.imgur.com/YcwgO3P.png" />
+  <img class="map" id="Area_BlackBorders_W=0.9" src="http://i.imgur.com/mzWYGXh.png" />
+  <img class="map" id="Area_BlackBorders_W=1"   src="http://i.imgur.com/Sw16690.png" />
+</div>
+<fieldset><label>5. Which value for W do you think is best for Average Area Per Person?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Area_BlackBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Area_BlackBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+<!-- Area, WhiteBorders. -->
+<section>
+<div class="slider" id="Area_WhiteBorders"></div>
+<div>
+  <img class="map" id="Area_WhiteBorders_W=0"   src="http://i.imgur.com/IfBcPNN.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.1" src="http://i.imgur.com/MRp5Toq.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.2" src="http://i.imgur.com/AU2Zam6.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.3" src="http://i.imgur.com/ftL40OR.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.4" src="http://i.imgur.com/r8f08VQ.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.5" src="http://i.imgur.com/2ik0RR1.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.6" src="http://i.imgur.com/GwWbN84.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.7" src="http://i.imgur.com/UjjIxK1.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.8" src="http://i.imgur.com/7NR2wAy.png" />
+  <img class="map" id="Area_WhiteBorders_W=0.9" src="http://i.imgur.com/bIfeYqo.png" />
+  <img class="map" id="Area_WhiteBorders_W=1"   src="http://i.imgur.com/m2wvYBZ.png" />
+</div>
+<fieldset><label>6. Which value for W do you think is best for Average Area Per Person?</label>
+<input type="number" min="0" max="1" step="0.1" maxlength="3" required name="Area_WhiteBorders_W"
+       class="form-control" style="display: inline-block; width: 70px">
+<div>Why?<textarea class="form-control" cols="120" name="Area_WhiteBorders_W_Why" rows="5"></textarea></div>
+</fieldset>
+<hr>
+</section>
+
+
+<div>Thank you! I appreciate your time and help.</div>
+
+<!-- End Survey Body --></div>
+</section>
+<!-- close container -->
+<style type="text/css">
+fieldset {
+    padding: 10px;
+    background:#fbfbfb;
+    border-radius:5px;
+    margin-bottom:5px;
+}
+span.radio {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: baseline;
+}
+img.map {
+  width: 100%;
+  margin: 20px 0 10px;
+}
+hr {
+  margin: 30px 0;
+}
+.slider {
+  width: 25%; 
+  border: 1px solid #0BF;
+  margin-bottom: -39px;
+  margin-left: 50%;
+  z-index: 1000;
+}
+.slider .ui-slider-handle { border: 2px solid blue; }
+</style>
