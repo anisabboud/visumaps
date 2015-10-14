@@ -1565,7 +1565,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
   var width = document.getElementById(container_id).offsetWidth;
   var height = width * 0.5; // / 2;
 
-  var topo, projection, path, svg, g;
+  var world, topo, neighbors, projection, path, svg, g;
 
   var graticule = d3.geo.graticule();
 
@@ -1594,10 +1594,10 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       g = svg.append("g");
   }
 
-  d3.json("../data/world-topo-min-geocoded.json", function(error, world) {
-      var countries = topojson.feature(world, world.objects.countries).features;
-
-      topo = countries;
+  d3.json("../data/world-topo-min-geocoded.json", function(error, world_topo) {
+      world = world_topo;
+      topo = topojson.feature(world, world.objects.countries).features;
+      neighbors = topojson.neighbors(world.objects.countries.geometries);
       draw(container_id, topo, width, height);
   });
 
@@ -1795,6 +1795,12 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
     return pivots;
   }
 
+    function dist(p1, p2) {
+        var a = p1[0] - p2[0];
+        var b = p1[1] - p2[1];
+        return Math.sqrt(a * a + b * b);
+    }
+
   function draw(container_id, topo, width, height) {
       svg.append("path")
           .datum(graticule)
@@ -1885,11 +1891,6 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
       // Legend - Part D.
       legendDiv += '<div style="background-color: white; position: absolute; bottom: 42px">'
       legendDiv += '<b>Legend:</b><table>';
-      console.log(pivots);
-      console.log(values[0]);
-      for (var i = 0; i < pivots.length; i++) {
-        console.log(values[pivots[i]]);
-      }
       for (var i = 0; i < pivots.length; i++) {
         legendDiv += '<tr><td style="width: 100px; background-color: ' + COLORS[i] + '"></td><td style="text-align:right">' 
             + commafy(i == 0 ? values[0] : values[pivots[i - 1]]) 
@@ -1939,6 +1940,45 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
               tooltip.classed("hidden", true);
           });
 
+      var total_neighbors = 0;
+      var different_color = 0;
+      for (var i = 0; i < topo.length; i++) {
+        var color = color_dict[topo[i].properties.geonameId];
+        for (var j = 0; j < neighbors[i].length; j++) {
+            var n = neighbors[i][j];
+            if (n == i) {  // The neighbor is the country itself, skip this.
+               continue; 
+            }
+            total_neighbors++;
+            var neighbor_color = color_dict[topo[n].properties.geonameId];
+            if (neighbor_color !== color) {
+                different_color++;
+            }
+        }
+      }
+      total_neighbors /= 2;
+      different_color /= 2;
+      console.log('W = ' + localStorage.W);
+      console.log('different: ' + different_color + ' out of ' + total_neighbors);
+
+      var mesh = topojson.mesh(world, world.objects.countries, function(a, b) {
+          return a !== b && ('properties' in a) && ('properties' in b) &&
+                 color_dict[a.properties.geonameId] !== color_dict[b.properties.geonameId];
+      });
+
+      console.log("mesh: " + mesh);
+      console.log("great-arc length: " + d3.geo.length(mesh));
+
+      var total_length = 0;
+      for (var i = 0; i < mesh.coordinates.length; i++) {
+          var arc_length = 0;
+          for (var j = 0; j < mesh.coordinates[i].length - 1; j++) {
+              arc_length += dist(mesh.coordinates[i][j], mesh.coordinates[i][j + 1]);
+          }
+          // console.log("arc i=" + i + " has length=" + arc_length);
+          total_length += arc_length;
+      }
+      console.log("polygonal length: " + Math.round(total_length));
 
       //EXAMPLE: adding some capitals from external CSV file
       // d3.csv("../data/country-capitals.csv", function(err, capitals) {
@@ -1950,7 +1990,7 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
   }
 
   function redraw(container_id, topo) {
-      console.log('redraw()');
+      // console.log('redraw()');
       width = document.getElementById(container_id).offsetWidth;
       height = width * 0.5; // / 2;
       d3.select("#" + container_id).select('svg').remove();
