@@ -5,6 +5,8 @@ $(document).ready(function(){
     $('textarea').autosize();
 });
 
+winkel = true;
+
 EUROPE = [
 	'Russia',
 	'Germany',
@@ -1010,15 +1012,22 @@ function processTSV() {
     success: function(geocoded_locations) {
       $('#charts_div').empty();
       for (var t = 0; t < tables.length; t++) {
-        $('#charts_div').append(
+        var div_id = 'map' + t;
+        var map_id = (t == 0 ? 'P' : t == 1 ? 'D' : 'A') + '3';
+        $('#charts_div').append('<div id="' + div_id + '">');
+        $('#' + div_id).append(
               '<h1>' +
               '<span style="padding-left: 10px">' + tables[t][0][1] + '</span>' +
-              '<span class="W" style="margin-left: 50px; color: #0BF"></span>' +
+              '<span style="margin-left: 80px; color: #0C3">Map ' + map_id + '</span>' +
+              '<span style="margin-left: 80px; color: #0BF">Equal-area</span>' +
+              '<span class="W" style="color: #0BF"></span><span style="color: #0BF"></span>' +
+              // '<span style="margin-left: 80px; color: #CCC">(Mercator)</span>' +
               '</h1>');
-        $('#charts_div').append(
+        $('#' + div_id).append(
               '<div id="chart_div' + t + '" class="map_container"></div>');
-        $('#charts_div').append(
-          '<div id="chart_legend' + t + '" class="legend_container"></div><hr />');
+        $('#' + div_id).append(
+          '<div id="chart_legend' + t + '" class="legend_container"></div>');
+        $('#charts_div').append('<hr />');
         drawRegionsMap(tables[t], t, geocoded_locations);
       }
     }
@@ -1574,13 +1583,16 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
   setup(width, height);
 
   function setup(width, height) {
-      // projection = d3.geo.mercator()
-      //     .translate([(width / 2), (height / 2)])
-      //     .scale(width / 2 / Math.PI);
 
+      projection = d3.geo.mercator()
+          .translate([(width / 2), (height / 2)])
+          .scale(width / 2 / Math.PI);
+
+    if (winkel) {
       projection = d3.geo.winkel3()
           .translate([width / 2, height * 0.6])
           .scale(width / 960 * 182);
+    }
 
       path = d3.geo.path().projection(projection);
 
@@ -1862,10 +1874,10 @@ function fillMap(container_id, table, geocoded_locations, column_name, legend_co
 
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_LENGTH);  // 1
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.JENKS);  // 2
-      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);  // 3
+      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_AREA_OPTIMAL);  // 3
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.EQUAL_INTERVAL);
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_GREEDY);
-      var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);  // 4
+      //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.OPTIMIZED_OPTIMAL);  // 4
       //var pivots = getPivots(areas, values, COLORS.length, ALGORITHM.BELL_CURVE);  // 5
 
       // console.log(areas);
